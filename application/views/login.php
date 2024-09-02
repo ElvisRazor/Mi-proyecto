@@ -101,7 +101,7 @@
                     <?php endif; ?>
                     <?= form_open('login/autenticar') ?>
                         <div class="input-group mb-3">
-                            <input type="text" name="nombre_usuario" class="form-control" placeholder="Nombre de Usuario" required>
+                            <input type="text" name="email" class="form-control" placeholder="Email" required>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-user"></span>

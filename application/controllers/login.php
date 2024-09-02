@@ -5,33 +5,41 @@ class Login extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('Usuario_model');
         $this->load->library('session');
+        $this->load->model('Usuario_model'); // Asegúrate de tener un modelo para manejar usuarios
     }
 
     public function index() {
-        $this->load->view('login_view');
+        // Si ya está logueado, redirigir al dashboard o página principal
+        if ($this->session->userdata('logged_in')) {
+            redirect('dashboard');
+        }
+        $this->load->view('login');
     }
 
     public function autenticar() {
-        $nombre_usuario = $this->input->post('nombre_usuario');
-        $password = $this->input->post('password');
-
-        $usuario = $this->Usuario_model->autenticar($nombre_usuario, $password);
-
-        if ($usuario) {
-            $this->session->set_userdata('usuario_id', $usuario['usuario_id']);
-            $this->session->set_userdata('nombre_usuario', $usuario['nombre_usuario']);
+        $email = $this->input->post('email');
+        $password = md5($this->input->post('password')); // Usa un método más seguro en producción
+    
+        $user = $this->Usuario_model->get_user($email, $password);
+    
+        if ($user) {
+            log_message('info', 'Usuario autenticado: ' . $email); // Agrega un registro para depuración
+            $this->session->set_userdata([
+                'logged_in' => TRUE,
+                'user_id' => $user->idUsuario,
+                'user_role' => $user->rol
+            ]);
             redirect('dashboard');
         } else {
-            $this->session->set_flashdata('error', 'Nombre de usuario o contraseña incorrectos.');
+            log_message('error', 'Fallo de autenticación para el usuario: ' . $email); // Agrega un registro para depuración
+            $this->session->set_flashdata('error', 'Email o contraseña incorrectos');
             redirect('login');
         }
-    }
+    }    
 
-    public function cerrar_sesion() {
+    public function logout() {
         $this->session->sess_destroy();
         redirect('login');
     }
 }
-?>

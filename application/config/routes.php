@@ -7,9 +7,9 @@ $route['default_controller'] = 'login';
 // Rutas para el controlador Login
 $route['login'] = 'login/index'; // Ruta para la acción index del controlador Login
 $route['login/autenticar'] = 'login/autenticar'; // Ruta para el método autenticar del controlador Login
-
+$route['logout'] = 'login/logout';
 // Ruta para el controlador Dashboard
-$route['dashboard'] = 'dashboard/index'; // Ruta para la acción index del controlador Dashboard
+$route['dashboard'] = 'dashboard'; // Ruta para la acción index del controlador Dashboard
 
 // Rutas para Usuarios
 $route['usuarios'] = 'usuarios/index';

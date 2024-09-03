@@ -15,11 +15,11 @@
     <div class="d-flex justify-content-center align-items-center min-vh-100">
         <div class="login-box">
             <div class="login-logo">
-                <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo" class="img-fluid">
+                <img src="<?= base_url('assets/img/pisosbol1.PNG') ?>" alt="Logo" class="img-fluid">
             </div>
             <div class="card">
                 <div class="card-body login-card-body">
-                    <p class="login-box-msg text-center">Inicia sesión para comenzar tu sesión</p>
+                    <p class="login-box-msg text-center"><b>Inicia sesión</b></p>
                     <?php if ($this->session->flashdata('error')): ?>
                         <div class="alert alert-danger text-center">
                             <?= $this->session->flashdata('error') ?>
@@ -64,5 +64,21 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="https://adminlte.io/themes/v3/dist/js/adminlte.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        $(document).ready(function () {
+            <?php if($this->session->flashdata("error")): ?>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '<?= $this->session->flashdata("error"); ?>',
+                });
+            <?php endif; ?>
+
+            <?php $this->session->unset_userdata('success'); ?>
+            <?php $this->session->unset_userdata('error'); ?>
+        });
+    </script>
 </body>
 </html>

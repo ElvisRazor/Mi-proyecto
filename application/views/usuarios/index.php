@@ -27,10 +27,12 @@
                             <table id="example3" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
-                                        <th><strong>ID</strong></th>
                                         <th><strong>Nombre Completo</strong></th>
                                         <th><strong>Correo Electrónico</strong></th>
-                                        <th><strong>Nombre de Usuario</strong></th>
+                                        <th><strong>Tipo Documento</strong></th>
+                                        <th><strong>Nro. Documento</strong></th>
+                                        <th><strong>Dirección</strong></th>
+                                        <th><strong>Telefono</strong></th>
                                         <th><strong>Rol</strong></th>
                                         <th><strong>Estado</strong></th> <!-- Columna para mostrar el badge -->
                                         <th><strong>Acciones</strong></th>
@@ -39,17 +41,27 @@
                                 <tbody>
                                     <?php foreach ($usuarios as $usuario): ?>
                                         <tr>
-                                            <td><strong><?= $usuario['usuario_id'] ?></strong></td>
-                                            <td><?= $usuario['nombre_completo'] ?></td>
+                                            <td><?= $usuario['nombre'] ?></td>
                                             <td><?= $usuario['email'] ?></td>
-                                            <td><?= $usuario['nombre_usuario'] ?></td>
+                                            <td>
+                                                <?php if ($usuario['tipoDocumento'] == 'Ci/Nit'): ?>
+                                                    <span class="badge light badge-success">CI/NIT</span>
+                                                <?php elseif ($usuario['tipoDocumento'] == 'Pasaporte'): ?>
+                                                    <span class="badge light badge-warning">Pasaporte</span>
+                                                <?php else: ?>
+                                                    <span class="badge light badge-secondary">Desconocido</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td><?= $usuario['numDocumento'] ?></td>
+                                            <td><?= $usuario['direccion'] ?></td>
+                                            <td><?= $usuario['telefono'] ?></td>
                                             <td>
                                                 <?php if ($usuario['rol'] == 'Administrador'): ?>
                                                     <span class="badge light badge-success">Administrador</span>
-                                                <?php elseif ($usuario['rol'] == 'Cajero'): ?>
+                                                <?php elseif ($usuario['rol'] == 'Vendedor'): ?>
                                                     <span class="badge light badge-warning">Cajero</span>
-                                                <?php elseif ($usuario['rol'] == 'Plataforma'): ?>
-                                                    <span class="badge light badge-danger">Plataforma</span>
+                                                <?php elseif ($usuario['rol'] == 'Cliente'): ?>
+                                                    <span class="badge light badge-danger">Cliente</span>
                                                 <?php else: ?>
                                                     <span class="badge light badge-secondary">Desconocido</span>
                                                 <?php endif; ?>
@@ -78,9 +90,9 @@
                                                     </button>
                                                     <div class="dropdown-menu">
                                                     <a class="dropdown-item"
-                                                            href="<?= site_url('usuarios/editar/' . $usuario['usuario_id']) ?>">Editar</a>
+                                                            href="<?= site_url('usuarios/editar/' . $usuario['idUsuario']) ?>">Editar</a>
                                                         <a class="dropdown-item"
-                                                            href="<?= site_url('usuarios/eliminar/' . $usuario['usuario_id']) ?>"
+                                                            href="<?= site_url('usuarios/eliminar/' . $usuario['idUsuario']) ?>"
                                                             onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</a>
                                                     </div>
 

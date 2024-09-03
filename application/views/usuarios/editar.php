@@ -19,13 +19,13 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="<?= site_url('usuarios/editar/' . $usuario->usuario_id) ?>" method="post">
+                        <form action="<?= site_url('usuarios/editar/' . $usuario->idUsuario) ?>" method="post">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
-                                        <label for="nombre_completo" class="form-label">Nombre Completo:</label>
-                                        <input type="text" name="nombre_completo" class="form-control" id="nombre_completo"
-                                            value="<?= $usuario->nombre_completo ?>" required>
+                                        <label for="nombre" class="form-label">Nombre Completo:</label>
+                                        <input type="text" name="nombre" class="form-control" id="nombre"
+                                            value="<?= $usuarios->nombre ?>" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="email" class="form-label">Correo Electrónico:</label>
@@ -33,9 +33,9 @@
                                             value="<?= $usuario->email ?>" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="nombre_usuario" class="form-label">Nombre de Usuario:</label>
-                                        <input type="text" name="nombre_usuario" class="form-control" id="nombre_usuario"
-                                            value="<?= $usuario->nombre_usuario ?>" required>
+                                        <label for="nombre" class="form-label">Nombre de Usuario:</label>
+                                        <input type="text" name="nombre" class="form-control" id="nombre"
+                                            value="<?= $usuario->nombre ?>" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="rol" class="form-label">Rol:</label>

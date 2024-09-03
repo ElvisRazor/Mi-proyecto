@@ -4,9 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['base_url'] = "http://".$_SERVER['HTTP_HOST'];
 
 
-//$config['base_url'] = 'http://localhost/pisosbol';
+$config['base_url'] = 'http://localhost/pisosbol/';
 
-$config['base_url'] .= preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/';
+//$config['base_url'] .= preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/';
 
 $config['index_page'] = 'index.php';
 
@@ -14,7 +14,7 @@ $config['uri_protocol']	= 'REQUEST_URI';
 
 $config['url_suffix'] = '';
 
-$config['language']	= 'espanish';
+$config['language']	= 'english';
 
 $config['charset'] = 'UTF-8';
 
@@ -33,7 +33,7 @@ $config['directory_trigger'] = 'd';
 
 $config['allow_get_array'] = TRUE;
 
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 4;
 
 $config['log_path'] = '';
 

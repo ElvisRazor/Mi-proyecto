@@ -13,7 +13,6 @@ class Login extends CI_Controller {
             redirect(base_url()."dashboard");
         } else {
             $this->load->view("login");
-            $this->load->view("layout/js/login");
         }
     }
 
@@ -37,7 +36,6 @@ class Login extends CI_Controller {
             );
 
             $this->session->set_userdata($data);
-            $this->session->set_flashdata("success", "Bienvenido ".$res->nombre."!");
             redirect(base_url()."dashboard");
         }
     }

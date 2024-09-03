@@ -3,14 +3,59 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Usuario_model extends CI_Model {
 
-public function __construct() {
-    $this->load->database();
-}
+    public function __construct() {
+        $this->load->database();
+    }
 
-public function get_user($email, $password) {
-    $this->db->where('email', $email);
-    $this->db->where('password', $password); // Verifica que las contraseñas estén cifradas como MD5 en la base de datos
-    $query = $this->db->get('usuarios');
-    return $query->row(); // Devuelve el primer resultado
+    // Obtener usuarios activos
+    public function obtener_usuarios_activos() {
+        $this->db->where('estado', 1); // Solo usuarios activos
+        $query = $this->db->get('usuarios');
+        return $query->result_array(); // Devuelve todos los resultados como un array
+    }
+
+    // Obtener usuarios eliminados (inactivos)
+    public function obtener_usuarios_eliminados() {
+        $this->db->where('estado', 0); // Solo usuarios inactivos
+        $query = $this->db->get('usuarios');
+        return $query->result_array(); // Devuelve todos los resultados como un array
+    }
+
+    // Agregar un nuevo usuario
+    public function agregar_usuario($data) {
+        return $this->db->insert('usuarios', $data);
+    }
+
+    // Editar un usuario existente
+    public function editar_usuario($idUsuario, $data) {
+        $this->db->where('idUsuario', $idUsuario);
+        return $this->db->update('usuarios', $data);
+    }
+
+    // Eliminar un usuario (cambiar el estado a inactivo)
+    public function eliminar_usuario($idUsuario) {
+        $this->db->where('idUsuario', $idUsuario);
+        return $this->db->update('usuarios', ['estado' => 0]);
+    }
+
+    // Habilitar un usuario (cambiar el estado a activo)
+    public function habilitar_usuario($idUsuario) {
+        $this->db->where('idUsuario', $idUsuario);
+        return $this->db->update('usuarios', ['estado' => 1]);
+    }
+
+    // Verificar si un correo electrónico ya existe
+    public function email_exists($email) {
+        $this->db->where('email', $email);
+        $query = $this->db->get('usuarios');
+        return $query->num_rows() > 0;
+    }
+
+    // Obtener usuario por ID
+    public function obtener_usuario_por_id($idUsuario) {
+        $this->db->where('idUsuario', $idUsuario);
+        $query = $this->db->get('usuarios');
+        return $query->row_array();
+    }
 }
-}
+?>

@@ -20,21 +20,16 @@ $route['logout'] = 'login/logout'; // Procesa el cierre de sesión
 // Ruta para actualizar la sesión del usuario
 $route['update_session'] = 'login/updateSession'; // Actualiza los datos del usuario en la sesión
 
-// Rutas para los errores 404
-$route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
-
 // Rutas para Usuarios
 $route['usuarios'] = 'usuarios/index';
 $route['usuarios/agregar'] = 'usuarios/agregar';
-
 $route['usuarios/editar/(:num)'] = 'usuarios/editar/$1';
 $route['usuarios/eliminar/(:num)'] = 'usuarios/eliminar/$1';
 $route['usuarios/eliminados'] = 'usuarios/eliminados';
 $route['usuarios/habilitar/(:num)'] = 'usuarios/habilitar/$1';
 
 // Configuración para manejar errores 404
-//$route['404_override'] = 'errors/page_missing'; // Ruta para el controlador de errores 404 (opcional)
+$route['404_override'] = 'errors/page_missing'; // Ruta para el controlador de errores 404 (opcional)
 
 // Configuración para traducir guiones en las URI a guiones bajos en los nombres de métodos
-//$route['translate_uri_dashes'] = FALSE;
+$route['translate_uri_dashes'] = FALSE;

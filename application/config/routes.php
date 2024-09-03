@@ -36,6 +36,14 @@ $route['categorias/eliminar/(:num)'] = 'categorias/eliminar/$1'; // Elimina una 
 $route['categorias/inactivos'] = 'categorias/inactivos'; // Muestra la lista de categorías inactivas
 $route['categorias/habilitar/(:num)'] = 'categorias/habilitar/$1'; // Habilita una categoría específica
 
+// Ruta para el controlador de proveedores
+$route['proveedores'] = 'proveedores/index'; // Muestra la lista de proveedores
+$route['proveedores/agregar'] = 'proveedores/agregar'; // Formulario para agregar un nuevo proveedor
+$route['proveedores/editar/(:num)'] = 'proveedores/editar/$1'; // Formulario para editar un proveedor existente
+$route['proveedores/eliminar/(:num)'] = 'proveedores/eliminar/$1'; // Elimina un proveedor (lógico)
+$route['proveedores/eliminados'] = 'proveedores/eliminados'; // Muestra los proveedores eliminados
+$route['proveedores/habilitar/(:num)'] = 'proveedores/habilitar/$1'; // Habilita un proveedor eliminado
+
 // Configuración para manejar errores 404
 $route['404_override'] = 'errors/page_missing'; // Ruta para el controlador de errores 404 (opcional)
 

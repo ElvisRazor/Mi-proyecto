@@ -32,7 +32,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="chart-flot.html">Compras</a></li>
-                    <li><a href="chart-morris.html">Proveedores</a></li>
+                    <li><a href="<?php echo base_url(); ?>index.php/proveedores">Proveedores</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

@@ -23,7 +23,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="app-profile.html">Producto</a></li>
-                    <li><a href="post-details.html">Categoria</a></li>
+                    <li><a href="<?php echo base_url(); ?>index.php/categorias">Categorias</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

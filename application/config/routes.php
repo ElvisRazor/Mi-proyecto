@@ -28,6 +28,14 @@ $route['usuarios/eliminar/(:num)'] = 'usuarios/eliminar/$1';
 $route['usuarios/eliminados'] = 'usuarios/eliminados';
 $route['usuarios/habilitar/(:num)'] = 'usuarios/habilitar/$1';
 
+// Rutas para el controlador de categorías
+$route['categorias'] = 'categorias/index'; // Muestra la lista de categorías activas
+$route['categorias/agregar'] = 'categorias/agregar'; // Agrega una nueva categoría
+$route['categorias/editar/(:num)'] = 'categorias/editar/$1'; // Edita una categoría específica
+$route['categorias/eliminar/(:num)'] = 'categorias/eliminar/$1'; // Elimina una categoría específica
+$route['categorias/inactivos'] = 'categorias/inactivos'; // Muestra la lista de categorías inactivas
+$route['categorias/habilitar/(:num)'] = 'categorias/habilitar/$1'; // Habilita una categoría específica
+
 // Configuración para manejar errores 404
 $route['404_override'] = 'errors/page_missing'; // Ruta para el controlador de errores 404 (opcional)
 

@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['base_url'] = "http://".$_SERVER['HTTP_HOST'];
 
 
+//$config['base_url'] = 'http://localhost/pisosbol';
 
 $config['base_url'] .= preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/';
 
@@ -13,7 +14,7 @@ $config['uri_protocol']	= 'REQUEST_URI';
 
 $config['url_suffix'] = '';
 
-$config['language']	= 'english';
+$config['language']	= 'espanish';
 
 $config['charset'] = 'UTF-8';
 

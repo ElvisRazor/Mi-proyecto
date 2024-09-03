@@ -6,9 +6,8 @@ class Dashboard extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->library('session');
-        // Verifica que el usuario esté logueado
-        if (!$this->session->userdata('usuario_id')) {
-            redirect('login');
+        if (!$this->session->userdata('login')) {
+            redirect(base_url() . 'login');
         }
     }
 
@@ -16,7 +15,7 @@ class Dashboard extends CI_Controller {
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
-        $this->load->view('dashboard/index'); // Vista del dashboard
+        $this->load->view('dashboard/index');
         $this->load->view('templates/footer');
     }
 }

@@ -15,6 +15,9 @@
                     <i class="flaticon-144-layout"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
+                <ul>
+                    <li><a href="<?php echo base_url(); ?>index.php/dashboard">Dashboard</a></li>
+                </ul>
             </li>
             <li class="nav-label">Menú</li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -22,7 +25,7 @@
                     <span class="nav-text">Almacen</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="app-profile.html">Producto</a></li>
+                    <li><a href="<?php echo base_url(); ?>index.php/productos">Productos</a></li>
                     <li><a href="<?php echo base_url(); ?>index.php/categorias">Categorias</a></li>
                 </ul>
             </li>
@@ -31,7 +34,7 @@
                     <span class="nav-text">Compras</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="chart-flot.html">Compras</a></li>
+                    <li><a href="<?php echo base_url(); ?>index.php/compras">Compras</a></li>
                     <li><a href="<?php echo base_url(); ?>index.php/proveedores">Proveedores</a></li>
                 </ul>
             </li>
@@ -40,7 +43,7 @@
                     <span class="nav-text">Ventas</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="chart-flot.html">Ventas</a></li>
+                    <li><a href="<?php echo base_url(); ?>index.php/ventas">Ventas</a></li>
                     <li><a href="<?php echo base_url(); ?>index.php/clientes">Clientes</a></li>
                 </ul>
             </li>
@@ -50,7 +53,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="<?php echo base_url(); ?>index.php/usuarios">Usuarios</a></li>
-                    <li><a href="chart-morris.html">Permisos</a></li>
+                    
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

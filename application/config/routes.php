@@ -7,16 +7,12 @@ $route['default_controller'] = 'login'; // Redirige a la página de login por de
 // Rutas para el controlador Login
 $route['login'] = 'login/index'; // Muestra la página de login
 $route['login/login'] = 'login/login'; // Procesa el inicio de sesión
-
 // Ruta para recuperar la contraseña
 $route['recuperar_contrasena'] = 'recuperar_contrasena'; // Muestra la página para recuperar la contraseña
-
 // Rutas para el controlador Dashboard
 $route['dashboard'] = 'dashboard/index'; // Muestra la página del dashboard
-
 // Ruta para cerrar sesión
 $route['logout'] = 'login/logout'; // Procesa el cierre de sesión
-
 // Ruta para actualizar la sesión del usuario
 $route['update_session'] = 'login/updateSession'; // Actualiza los datos del usuario en la sesión
 

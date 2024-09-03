@@ -1,26 +1,34 @@
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>Usuarios Eliminados</h1>
-    </section>
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Clientes Inactivos</h4>
+                    <p class="mb-0">Lista de Clientes Inactivos</p>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="<?= site_url('usuarios') ?>">Clientes Activos</a></li>
+                    <li class="breadcrumb-item active">Clientes Inactivos</li>
+                </ol>
+            </div>
+        </div>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            <!-- Default box -->
+        <div class="row">
+            <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Usuarios Eliminados</h3>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered">
+                <div class="table-responsive">
+                    <table id="example3" class="display" style="min-width: 845px">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Nombre Completo</th>
                                 <th>Correo Electrónico</th>
-                                <th>Nombre de Usuario</th>
+                                <th>Tipo Documento</th>
                                 <th>Rol</th>
                                 <th>Acciones</th>
                             </tr>
@@ -28,24 +36,21 @@
                         <tbody>
                             <?php foreach ($usuarios as $usuario): ?>
                                 <tr>
-                                    <td><?= $usuario['usuario_id'] ?></td>
-                                    <td><?= $usuario['nombre_completo'] ?></td>
+                                    <td><?= $usuario['nombre'] ?></td>
                                     <td><?= $usuario['email'] ?></td>
-                                    <td><?= $usuario['nombre_usuario'] ?></td>
+                                    <td><?= $usuario['tipoDocumento'] ?></td>
                                     <td><?= $usuario['rol'] ?></td>
                                     <td>
-                                        <a href="<?= site_url('usuarios/habilitar/'.$usuario['usuario_id']) ?>" class="btn btn-success btn-sm">Habilitar</a>
+                                        <a href="<?= site_url('usuarios/habilitar/'.$usuario['idUsuario']) ?>" class="btn btn-success btn-sm">Habilitar</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <!-- /.card-body -->
             </div>
-            <!-- /.card -->
-        </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+        </div>
+    </div>
 </div>
-<!-- /.content-wrapper -->

@@ -22,13 +22,19 @@ class Usuarios extends CI_Controller {
 
     public function agregar() {
         if ($this->input->post()) {
-            $this->form_validation->set_rules('nombre', 'Nombre Completo', 'required');
+            $this->form_validation->set_rules('nombre', 'Nombre Completo', 'required|regex_match[/^[a-zA-Z\s]+$/]', [
+                'regex_match' => 'El nombre completo solo puede contener letras y espacios.'
+            ]);
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|callback_check_email');
             $this->form_validation->set_rules('rol', 'Rol', 'required');
             $this->form_validation->set_rules('tipoDocumento', 'Tipo de Documento', 'required');
-            $this->form_validation->set_rules('numDocumento', 'Número de Documento', 'required');
+            $this->form_validation->set_rules('numDocumento', 'Número de Documento', 'required|regex_match[/^[a-zA-Z0-9-]+$/]', [
+                'regex_match' => 'El número de documento solo puede contener letras, números y guiones.'
+            ]);
             $this->form_validation->set_rules('direccion', 'Dirección', 'required');
-            $this->form_validation->set_rules('telefono', 'Teléfono', 'required');
+            $this->form_validation->set_rules('telefono', 'Teléfono', 'required|numeric', [
+                'numeric' => 'El teléfono solo puede contener números.'
+            ]);
 
             if ($this->form_validation->run() === TRUE) {
                 $password = $this->generar_contraseña();
@@ -56,24 +62,32 @@ class Usuarios extends CI_Controller {
             }
         }
 
+        $data['tipos_documento'] = ['Ci/Nit', 'Pasaporte'];
+        $data['roles'] = ['vendedor', 'administrador', 'cliente', 'proveedor'];
+
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
-        $this->load->view('usuarios/agregar');
+        $this->load->view('usuarios/agregar', $data);
         $this->load->view('templates/footer');
     }
 
     public function editar($idUsuario) {
         if ($this->input->post()) {
-            $this->form_validation->set_rules('nombre', 'Nombre Completo', 'required');
+            $this->form_validation->set_rules('nombre', 'Nombre Completo', 'required|regex_match[/^[a-zA-Z\s]+$/]', [
+                'regex_match' => 'El nombre completo solo puede contener letras y espacios.'
+            ]);
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email');
             $this->form_validation->set_rules('rol', 'Rol', 'required');
             $this->form_validation->set_rules('tipoDocumento', 'Tipo de Documento', 'required');
-            $this->form_validation->set_rules('numDocumento', 'Número de Documento', 'required');
+            $this->form_validation->set_rules('numDocumento', 'Número de Documento', 'required|regex_match[/^[a-zA-Z0-9-]+$/]', [
+                'regex_match' => 'El número de documento solo puede contener letras, números y guiones.'
+            ]);
             $this->form_validation->set_rules('direccion', 'Dirección', 'required');
-            $this->form_validation->set_rules('telefono', 'Teléfono', 'required');
+            $this->form_validation->set_rules('telefono', 'Teléfono', 'required|numeric', [
+                'numeric' => 'El teléfono solo puede contener números.'
+            ]);
 
-            $data['usuarios'] = $this->Usuario_model->obtener_usuario_por_id($idUsuario);
             if ($this->form_validation->run() === TRUE) {
                 $data = [
                     'nombre' => $this->input->post('nombre'),
@@ -97,10 +111,13 @@ class Usuarios extends CI_Controller {
             }
         }
 
-        $data['usuarios'] = $this->Usuario_model->obtener_usuario_por_id($idUsuario);
-        if (!$data['usuarios']) {
+        $data['usuario'] = $this->Usuario_model->obtener_usuario_por_id($idUsuario);
+        if (!$data['usuario']) {
             show_404();
         }
+
+        $data['tipos_documento'] = ['Ci/Nit', 'Pasaporte'];
+        $data['roles'] = ['vendedor', 'administrador', 'cliente', 'proveedor'];
 
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');

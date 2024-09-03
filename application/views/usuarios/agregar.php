@@ -34,7 +34,7 @@
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
                                         <label for="nombre" class="form-label">Nombre Completo</label>
-                                        <input type="text" pattern="[A-Za-z\s]+" class="form-control" id="nombre" name="nombre" value="<?= set_value('nombre') ?>" required>
+                                        <input type="text" class="form-control" id="nombre" name="nombre" value="<?= set_value('nombre') ?>" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="email" class="form-label">Correo Electrónico</label>
@@ -58,7 +58,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="telefono" class="form-label">Telefono</label>
-                                        <input type="text" pattern="\d+" class="form-control" id="telefono" name="telefono" value="<?= set_value('telefono') ?>" required>
+                                        <input type="text" class="form-control" id="telefono" name="telefono" value="<?= set_value('telefono') ?>" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="password" class="form-label">Contraseña</label>

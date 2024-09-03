@@ -1,5 +1,4 @@
 <div class="content-body">
-
     <div class="container-fluid">
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
@@ -11,8 +10,7 @@
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<?= site_url('clientes/agregar') ?>">Agregar Nuevo</a></li>
-                    <li class="breadcrumb-item active"><a href="<?= site_url('clientes/eliminados') ?>">Inactivos</a>
-                    </li>
+                    <li class="breadcrumb-item active"><a href="<?= site_url('clientes/eliminados') ?>">Inactivos</a></li>
                 </ol>
             </div>
         </div>
@@ -28,10 +26,9 @@
                             <table id="example3" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
-                                        <th><strong>ID</strong></th>
-                                        <th><strong>Nombre Completo</strong></th>
-                                        <th><strong>CI</strong></th>
-                                        <th><strong>Teléfono</strong></th>
+                                        <th><strong>Nombre</strong></th>
+                                        <th><strong>Tipo Documento</strong></th>
+                                        <th><strong>Dirección</strong></th>
                                         <th><strong>Correo Electrónico</strong></th>
                                         <th><strong>Estado</strong></th>
                                         <th><strong>Acciones</strong></th>
@@ -40,11 +37,9 @@
                                 <tbody>
                                     <?php foreach ($clientes as $cliente): ?>
                                         <tr>
-                                            <td><strong><?= $cliente['cliente_id'] ?></strong></td>
-                                            <td><?= $cliente['nombre'] . ' ' . $cliente['primer_apellido'] . ' ' . $cliente['segundo_apellido'] ?>
-                                            </td>
-                                            <td><?= $cliente['ci'] ?></td>
-                                            <td><?= $cliente['telefono'] ?></td>
+                                            <td><?= $cliente['nombre'] ?></td>
+                                            <td><?= $cliente['tipoDocumento'] ?></td>
+                                            <td><?= $cliente['direccion'] ?></td>
                                             <td><?= $cliente['email'] ?></td>
                                             <td>
                                                 <?php if ($cliente['estado'] == '1'): ?>
@@ -71,12 +66,10 @@
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item"
-                                                            href="<?= site_url('clientes/verInfo/' . $cliente['cliente_id']) ?>">Ver</a>
+                                                            href="<?= site_url('clientes/editar/' . $cliente['idCliente']) ?>">Editar</a>
                                                         <a class="dropdown-item"
-                                                            href="<?= site_url('clientes/editar/' . $cliente['cliente_id']) ?>">Editar</a>
-                                                        <a class="dropdown-item"
-                                                            href="<?= site_url('clientes/eliminar/' . $cliente['cliente_id']) ?>">Eliminar</a>
-
+                                                            href="<?= site_url('clientes/eliminar/' . $cliente['idCliente']) ?>"
+                                                            onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">Eliminar</a>
                                                     </div>
                                                 </div>
                                             </td>

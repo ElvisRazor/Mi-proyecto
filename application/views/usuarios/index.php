@@ -20,7 +20,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Profile Datatable</h4>
+                        <h4 class="card-title">Lista De Usuarios</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -30,9 +30,7 @@
                                         <th><strong>Nombre Completo</strong></th>
                                         <th><strong>Correo Electrónico</strong></th>
                                         <th><strong>Tipo Documento</strong></th>
-                                        <th><strong>Nro. Documento</strong></th>
                                         <th><strong>Dirección</strong></th>
-                                        <th><strong>Telefono</strong></th>
                                         <th><strong>Rol</strong></th>
                                         <th><strong>Estado</strong></th> <!-- Columna para mostrar el badge -->
                                         <th><strong>Acciones</strong></th>
@@ -52,16 +50,16 @@
                                                     <span class="badge light badge-secondary">Desconocido</span>
                                                 <?php endif; ?>
                                             </td>
-                                            <td><?= $usuario['numDocumento'] ?></td>
                                             <td><?= $usuario['direccion'] ?></td>
-                                            <td><?= $usuario['telefono'] ?></td>
                                             <td>
-                                                <?php if ($usuario['rol'] == 'Administrador'): ?>
+                                                <?php if ($usuario['rol'] == 'administrador'): ?>
                                                     <span class="badge light badge-success">Administrador</span>
-                                                <?php elseif ($usuario['rol'] == 'Vendedor'): ?>
-                                                    <span class="badge light badge-warning">Cajero</span>
-                                                <?php elseif ($usuario['rol'] == 'Cliente'): ?>
+                                                <?php elseif ($usuario['rol'] == 'vendedor'): ?>
+                                                    <span class="badge light badge-warning">Vendedor</span>
+                                                <?php elseif ($usuario['rol'] == 'cliente'): ?>
                                                     <span class="badge light badge-danger">Cliente</span>
+                                                <?php elseif ($usuario['rol'] == 'proveedor'): ?>
+                                                    <span class="badge light badge-danger">Proveedor</span>
                                                 <?php else: ?>
                                                     <span class="badge light badge-secondary">Desconocido</span>
                                                 <?php endif; ?>
@@ -74,6 +72,7 @@
                                                 <?php else: ?>
                                                     <span class="badge light badge-secondary">Desconocido</span>
                                                 <?php endif; ?>
+                                            </td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn btn-success light sharp"
@@ -89,14 +88,12 @@
                                                         </svg>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                    <a class="dropdown-item"
+                                                        <a class="dropdown-item"
                                                             href="<?= site_url('usuarios/editar/' . $usuario['idUsuario']) ?>">Editar</a>
                                                         <a class="dropdown-item"
                                                             href="<?= site_url('usuarios/eliminar/' . $usuario['idUsuario']) ?>"
                                                             onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">Eliminar</a>
                                                     </div>
-
-
                                                 </div>
                                             </td>
                                         </tr>

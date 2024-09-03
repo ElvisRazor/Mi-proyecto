@@ -17,37 +17,38 @@
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <div class="card">
+                    <?php if ($this->session->flashdata('mensaje')): ?>
+                            <div class="alert alert-success">
+                                <?php echo $this->session->flashdata('mensaje'); ?>
+                            </div>
+                        <?php elseif ($this->session->flashdata('error')): ?>
+                            <div class="alert alert-danger">
+                                <?php echo $this->session->flashdata('error'); ?>
+                            </div>
+                        <?php endif; ?>
                     <div class="card-body">
                         <form action="<?= site_url('clientes/agregar') ?>" method="post">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
-                                        <label for="ci" class="form-label">CI</label>
-                                        <input type="text" name="ci" class="form-control" id="ci" required>
+                                        <label for="tipoDocumento" class="form-label">Tipo Documento</label>
+                                        <select class="form-control" id="tipoDocumento" name="tipoDocumento" required>
+                                            <option value="">Seleccione tipo de documento</option>
+                                            <option value="Ci/Nit" <?= set_select('tipoDocumento', 'Ci/Nit') ?>>CI/NIT</option>
+                                            <option value="pasaporte" <?= set_select('tipoDocumento', 'pasaporte') ?>>Pasaporte</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numDocumento" class="form-label">Número de Documento</label>
+                                        <input type="text" name="numDocumento" class="form-control" id="numDocumento" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="nombre" class="form-label">Nombre</label>
                                         <input type="text" name="nombre" class="form-control" id="nombre" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="primer_apellido" class="form-label">Primer Apellido</label>
-                                        <input type="text" name="primer_apellido" class="form-control"
-                                            id="primer_apellido" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="segundo_apellido" class="form-label">Segundo Apellido</label>
-                                        <input type="text" name="segundo_apellido" class="form-control"
-                                            id="segundo_apellido" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento</label>
-                                        <input type="date" name="fecha_nacimiento" class="form-control"
-                                            id="fecha_nacimiento" required>
-                                    </div>
-                                    <div class="form-group">
                                         <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" name="direccion" class="form-control" id="direccion"
-                                            required>
+                                        <input type="text" name="direccion" class="form-control" id="direccion" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="telefono" class="form-label">Teléfono</label>
@@ -58,37 +59,7 @@
                                         <input type="email" name="email" class="form-control" id="email" required>
                                     </div>
                                 </div>
-
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="form-group">
-                                        <label for="nombre_garante" class="form-label">Nombre del Garante</label>
-                                        <input type="text" name="nombre_garante" class="form-control"
-                                            id="nombre_garante" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="apellidos_garante" class="form-label">Apellidos del Garante</label>
-                                        <input type="text" name="apellidos_garante" class="form-control"
-                                            id="apellidos_garante" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="telefono_garante" class="form-label">Teléfono del Garante</label>
-                                        <input type="text" name="telefono_garante" class="form-control"
-                                            id="telefono_garante" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email_garante" class="form-label">Correo Electrónico del
-                                            Garante</label>
-                                        <input type="email" name="email_garante" class="form-control" id="email_garante"
-                                            required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="direccion_garante" class="form-label">Dirección del Garante</label>
-                                        <input type="text" name="direccion_garante" class="form-control"
-                                            id="direccion_garante" required>
-                                    </div>
-                                </div>
                             </div>
-
                             <button type="submit" class="btn btn-primary">Agregar Cliente</button>
                         </form>
                     </div>

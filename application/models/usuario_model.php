@@ -7,6 +7,24 @@ class Usuario_model extends CI_Model {
         $this->load->database();
     }
 
+    // Contar el número total de usuarios
+    public function contar_usuarios() {
+        return $this->db->count_all('usuarios');
+    }
+
+    // Calcular el incremento de usuarios en la última semana
+    public function calcular_incremento_usuarios() {
+        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 week')));
+        $nuevos_usuarios = $this->db->count_all_results('usuarios');
+
+        $total_usuarios = $this->contar_usuarios();
+        if ($total_usuarios > 0) {
+            return ($nuevos_usuarios / $total_usuarios) * 100;
+        } else {
+            return 0;
+        }
+    }
+
     // Obtener usuarios activos
     public function obtener_usuarios_activos() {
         $this->db->where('estado', 1); // Solo usuarios activos

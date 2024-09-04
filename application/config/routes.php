@@ -40,6 +40,28 @@ $route['proveedores/eliminar/(:num)'] = 'proveedores/eliminar/$1'; // Elimina un
 $route['proveedores/eliminados'] = 'proveedores/eliminados'; // Muestra los proveedores eliminados
 $route['proveedores/habilitar/(:num)'] = 'proveedores/habilitar/$1'; // Habilita un proveedor eliminado
 
+// Ruta para el controlador de compras
+$route['compras'] = 'compras/index'; // Ruta para listar todas las compras
+$route['compras/agregar'] = 'compras/agregar'; // Ruta para agregar una nueva compra
+$route['compras/editar/(:num)'] = 'compras/editar/$1'; // Ruta para editar una compra específica
+$route['compras/eliminar/(:num)'] = 'compras/eliminar/$1'; // Ruta para eliminar una compra específica
+$route['compras/eliminados'] = 'compras/eliminados'; // Ruta para listar las compras eliminadas
+$route['compras/habilitar/(:num)'] = 'compras/habilitar/$1'; // Ruta para habilitar una compra eliminada
+
+// Ruta para el controlador de ventas
+$route['ventas'] = 'ventas/index'; // Ruta para listar todas las ventas
+$route['ventas/agregar'] = 'ventas/agregar'; // Ruta para agregar una nueva venta
+$route['ventas/editar/(:num)'] = 'ventas/editar/$1'; // Ruta para editar una venta específica
+$route['ventas/eliminar/(:num)'] = 'ventas/eliminar/$1'; // Ruta para eliminar una venta específica
+$route['ventas/eliminados'] = 'ventas/eliminados'; // Ruta para listar las ventas eliminadas
+$route['ventas/habilitar/(:num)'] = 'ventas/habilitar/$1'; // Ruta para habilitar una venta eliminada
+
+// Rutas para Productos
+$route['productos'] = 'productos/index'; // Página principal de productos
+$route['productos/agregar'] = 'productos/agregar'; // Página para agregar un nuevo producto
+$route['productos/editar/(:num)'] = 'productos/editar/$1'; // Página para editar un producto
+$route['productos/eliminar/(:num)'] = 'productos/eliminar/$1'; // Página para eliminar un producto
+
 // Configuración para manejar errores 404
 $route['404_override'] = 'errors/page_missing'; // Ruta para el controlador de errores 404 (opcional)
 

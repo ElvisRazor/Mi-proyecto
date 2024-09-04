@@ -7,6 +7,24 @@ class Cliente_model extends CI_Model {
         $this->load->database();
     }
 
+    // Contar el número total de usuarios
+    public function contar_clientes() {
+        return $this->db->count_all('clientes');
+    }
+
+    // Calcular el incremento de usuarios en la última semana
+    public function calcular_incremento_clientes() {
+        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 week')));
+        $nuevos_clientes = $this->db->count_all_results('clientes');
+
+        $total_clientes = $this->contar_clientes();
+        if ($total_clientes > 0) {
+            return ($nuevos_clientes / $total_clientes) * 100;
+        } else {
+            return 0;
+        }
+    }
+
     // Obtener clientes activos
     public function obtener_clientes_activos() {
         $this->db->where('estado', 1); // Solo clientes activos

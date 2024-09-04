@@ -3,14 +3,14 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Clientes Inactivos</h4>
-                    <p class="mb-0">Lista de Clientes Inactivos</p>
+                    <h4>Usuarios Inactivos</h4>
+                    <p class="mb-0">Lista de Usuarios Inactivos</p>
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="<?= site_url('usuarios') ?>">Clientes Activos</a></li>
-                    <li class="breadcrumb-item active">Clientes Inactivos</li>
+                    <li class="breadcrumb-item"><a href="<?= site_url('usuarios') ?>">Usuarios Activos</a></li>
+                    <li class="breadcrumb-item active">Usuarios Inactivos</li>
                 </ol>
             </div>
         </div>

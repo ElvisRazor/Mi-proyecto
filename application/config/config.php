@@ -8,6 +8,13 @@ $config['base_url'] = 'http://localhost/pisosbol/';
 
 //$config['base_url'] .= preg_replace('@/+$@','',dirname($_SERVER['SCRIPT_NAME'])).'/';
 
+$config['upload_path'] = './uploads/productos/';
+$config['allowed_types'] = 'gif|jpg|png';
+$config['max_size'] = 2048; // 2 MB
+$config['max_width'] = 1024;
+$config['max_height'] = 768;
+
+
 $config['index_page'] = 'index.php';
 
 $config['uri_protocol']	= 'REQUEST_URI';

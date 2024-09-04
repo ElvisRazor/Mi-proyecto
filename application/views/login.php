@@ -20,9 +20,9 @@
             justify-content: center;
             align-items: center;
             background: linear-gradient(135deg, 
-                red, orange, yellow, green, blue, indigo, violet);
+                red, brown, orange, green, brown, indigo, black);
             background-size: 400% 400%;
-            animation: rainbowAnimation 10s ease infinite;
+            animation: rainbowAnimation 22s ease infinite;
         }
 
         @keyframes rainbowAnimation {

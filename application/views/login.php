@@ -12,77 +12,91 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, 
-                red, brown, orange, green, brown, indigo, black);
-            background-size: 400% 400%;
-            animation: rainbowAnimation 22s ease infinite;
-        }
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url('assets/img/pisosbol(1).PNG') no-repeat center center fixed;
+        background-size: cover;
+    }
 
-        @keyframes rainbowAnimation {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+    .login-box { 
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.3); /* Fondo semitransparente */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        width: 450px;
+    }
 
-        .login-box {
-            position: relative;
-            z-index: 1;
-            border: 2px solid #ffab40; /* Color resaltante */
-            border-radius: 10px;
-            background: #ffffff;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-        }
+    .login-logo img {
+        width: 120px;
+        margin-bottom: 15px;
+    }
+    .card {
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.0); /* Fondo semitransparente */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
 
-        .login-logo img {
-            width: 150px;
-            margin-bottom: 20px;
-        }
+    .card-body {
+        padding: 20px;
+    }
 
-        .card-body {
-            padding: 30px;
-        }
+    .btn-primary {
+        background-color: #4caf50;
+        border-color: #4caf50;
+        transition: background-color 0.3s ease-in-out;
+        border-radius: 4px;
+        padding: 10px;
+    }
 
-        .btn-primary {
-            background-color: #ffab40;
-            border-color: #ffab40;
-            transition: background-color 0.3s ease;
-        }
+    .btn-primary:hover {
+        background-color: #388e3c;
+        border-color: #388e3c;
+    }
 
-        .btn-primary:hover {
-            background-color: #ff8c00;
-            border-color: #ff8c00;
-        }
+    .input-group-text {
+        background-color: #66bb6a;
+        color: #ffffff;
+    }
 
-        .input-group-text {
-            background-color: #ffab40;
-            color: #ffffff;
-        }
+    .form-control:focus {
+        border-color: #66bb6a;
+        box-shadow: none;
+    }
 
-        .form-control:focus {
-            border-color: #ff8c00;
-            box-shadow: none;
-        }
+    a {
+        color: #1b5e20;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
 
-        a {
-            color: #ffab40;
-        }
+    a:hover {
+        color: #1b5e20;
+    }
 
-        a:hover {
-            color: #ff8c00;
-        }
-    </style>
+    /* Extra styles for smoothness */
+    input[type="text"], input[type="password"] {
+        border-radius: 4px;
+        border: 5px solid #ccc;
+        padding: 15px;
+        transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+        border-color: #4caf50;
+    }
+</style>
+
+
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo text-center">
-            <img src="<?= base_url('assets/img/pisosbol(1).PNG') ?>" alt="Logo" class="img-fluid">
+            <img src="<?= base_url('assets/img/pisosbol1.PNG') ?>" alt="Logo" class="img-fluid">
         </div>
         <div class="card">
             <div class="card-body login-card-body">
@@ -116,7 +130,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <a href="<?= base_url('recuperar_contrasena') ?>" class="text-sm">Olvidé mi contraseña</a>
+                            <a href="<?= base_url('recuperar_contrasena') ?>" class="text-sm"><b>Olvidé mi contraseña</b></a>
                         </div>
                     </div>
                 <?= form_close() ?>

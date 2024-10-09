@@ -39,7 +39,7 @@
                             <div class="form-group">
                                 <label for="idCategoria">Categoría</label>
                                 <select class="form-control" id="idCategoria" name="idCategoria" required>
-                                    <?php foreach ($categorias as $categoria): ?>
+                                    <?php foreach ($categoria as $categoria): ?>
                                         <option value="<?= $categoria['idCategoria'] ?>" <?= $categoria['idCategoria'] == $producto['idCategoria'] ? 'selected' : '' ?>><?= $categoria['nombre'] ?></option>
                                     <?php endforeach; ?>
                                 </select>

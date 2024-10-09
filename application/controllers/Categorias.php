@@ -11,7 +11,7 @@ class Categorias extends CI_Controller {
     }
 
     public function index() {
-        $data['categorias'] = $this->Categoria_model->obtener_categorias_activos();
+        $data['categoria'] = $this->Categoria_model->obtener_categorias_activos();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
@@ -86,7 +86,7 @@ class Categorias extends CI_Controller {
     }
 
     public function inactivos() {
-        $data['categorias'] = $this->Categoria_model->obtener_categorias_inactivos();
+        $data['categoria'] = $this->Categoria_model->obtener_categorias_inactivos();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');

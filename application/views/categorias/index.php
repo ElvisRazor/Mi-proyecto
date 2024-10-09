@@ -33,7 +33,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($categorias as $categoria): ?>
+                                    <?php foreach ($categoria as $categoria): ?>
                                         <tr>
                                             <td><?= $categoria['nombre'] ?></td>
                                             <td><?= $categoria['descripcion'] ?></td>

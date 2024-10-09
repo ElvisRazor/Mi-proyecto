@@ -12,7 +12,7 @@ class Clientes extends CI_Controller {
     }
 
     public function index() {
-        $data['clientes'] = $this->Cliente_model->obtener_clientes_activos();
+        $data['cliente'] = $this->Cliente_model->obtener_clientes_activos();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
@@ -119,7 +119,7 @@ class Clientes extends CI_Controller {
     }
 
     public function eliminados() {
-        $data['clientes'] = $this->Cliente_model->obtener_clientes_eliminados();
+        $data['cliente'] = $this->Cliente_model->obtener_clientes_eliminados();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');

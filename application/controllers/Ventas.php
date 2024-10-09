@@ -11,7 +11,7 @@ class Ventas extends CI_Controller {
     }
 
     public function index() {
-        $data['ventas'] = $this->Venta_model->obtener_ventas();
+        $data['venta'] = $this->Venta_model->obtener_ventas();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
@@ -21,88 +21,75 @@ class Ventas extends CI_Controller {
 
     public function agregar() {
         if ($this->input->post()) {
-            $this->form_validation->set_rules('idProveedor', 'Proveedor', 'required');
-            $this->form_validation->set_rules('idUsuario', 'Usuario', 'required');
-            $this->form_validation->set_rules('tipoComprobante', 'Tipo de Comprobante', 'required');
-            $this->form_validation->set_rules('serieComprobante', 'Serie de Comprobante', 'required');
-            $this->form_validation->set_rules('numComprobante', 'Número de Comprobante', 'required');
-            $this->form_validation->set_rules('impuesto', 'Impuesto', 'required|numeric');
+            // Validar formulario
+            $this->form_validation->set_rules('idCliente', 'Cliente', 'required');
+            $this->form_validation->set_rules('fechaRegistro', 'Fecha', 'required');
             $this->form_validation->set_rules('totalVenta', 'Total Venta', 'required|numeric');
-
+    
             if ($this->form_validation->run() === TRUE) {
-                $data = [
-                    'idProveedor' => $this->input->post('idProveedor'),
-                    'idUsuario' => $this->input->post('idUsuario'),
-                    'tipoComprobante' => $this->input->post('tipoComprobante'),
-                    'serieComprobante' => $this->input->post('serieComprobante'),
-                    'numComprobante' => $this->input->post('numComprobante'),
-                    'impuesto' => $this->input->post('impuesto'),
-                    'totalVenta' => $this->input->post('totalVenta')
-                ];
-
-                if ($this->Venta_model->agregar_venta($data)) {
+                $this->Venta_model->iniciar_transaccion();  // Iniciar transacción
+    
+                try {
+                    // Datos generales de la venta
+                    $data = [
+                        'idCliente' => $this->input->post('idCliente'),
+                        'fechaRegistro' => $this->input->post('fechaRegistro'),
+                        'tipoComprobante' => $this->input->post('tipoComprobante'),
+                        'numComprobante' => $this->input->post('numComprobante'),
+                        'totalVenta' => $this->input->post('totalVenta'),
+                        'estado' => 1 // Activo
+                    ];
+    
+                    // Detalles de los productos
+                    $detalles = [];
+                    $productos = $this->input->post('producto');
+                    $cantidades = $this->input->post('cantidad');
+                    $precios = $this->input->post('precio');
+    
+                    for ($i = 0; $i < count($productos); $i++) {
+                        // Validar si el producto existe y tiene stock
+                        $producto = $this->Venta_model->obtener_producto_por_id($productos[$i]);
+                        if ($producto && $producto['stock'] >= $cantidades[$i]) {
+                            $detalles[] = [
+                                'idProducto' => $productos[$i],
+                                'cantidad' => $cantidades[$i],
+                                'precioVenta' => $precios[$i],
+                                'subtotal' => $precios[$i] * $cantidades[$i]
+                            ];
+                        } else {
+                            throw new Exception("Producto no válido o sin stock suficiente");
+                        }
+                    }
+    
+                    // Insertar venta y detalles
+                    if (!$this->Venta_model->agregar_venta($data, $detalles)) {
+                        throw new Exception("Error al agregar la venta");
+                    }
+    
                     $this->session->set_flashdata('mensaje', 'Venta agregada correctamente.');
-                    redirect('compras');
-                } else {
-                    $this->session->set_flashdata('error', 'Error al agregar la venta.');
+                    redirect('ventas');
+    
+                } catch (Exception $e) {
+                    // Manejar errores
+                    $this->Venta_model->finalizar_transaccion();  // Revertir transacción
+                    $this->session->set_flashdata('error', $e->getMessage());
                 }
             } else {
                 $this->session->set_flashdata('error', validation_errors());
             }
         }
-
+    
+        // Cargar productos disponibles
+        $data['producto'] = $this->Venta_model->obtener_productos_con_stock();
+    
+        // Cargar clientes
+        $data['cliente'] = $this->Venta_model->obtener_clientes(); // Aquí agregamos la carga de clientes
+    
+        // Cargar la vista
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
-        $this->load->view('ventas/agregar');
+        $this->load->view('ventas/agregar', $data);
         $this->load->view('templates/footer');
-    }
-
-    public function editar($idventa) {
-        if ($this->input->post()) {
-            $this->form_validation->set_rules('idProveedor', 'Proveedor', 'required');
-            $this->form_validation->set_rules('idUsuario', 'Usuario', 'required');
-            $this->form_validation->set_rules('tipoComprobante', 'Tipo de Comprobante', 'required');
-            $this->form_validation->set_rules('serieComprobante', 'Serie de Comprobante', 'required');
-            $this->form_validation->set_rules('numComprobante', 'Número de Comprobante', 'required');
-            $this->form_validation->set_rules('impuesto', 'Impuesto', 'required|numeric');
-            $this->form_validation->set_rules('totalVenta', 'Total Venta', 'required|numeric');
-
-            if ($this->form_validation->run() === TRUE) {
-                $data = [
-                    'idProveedor' => $this->input->post('idProveedor'),
-                    'idUsuario' => $this->input->post('idUsuario'),
-                    'tipoComprobante' => $this->input->post('tipoComprobante'),
-                    'serieComprobante' => $this->input->post('serieComprobante'),
-                    'numComprobante' => $this->input->post('numComprobante'),
-                    'impuesto' => $this->input->post('impuesto'),
-                    'totalVenta' => $this->input->post('totalVenta')
-                ];
-
-                $this->Compra_model->editar_venta($idVenta, $data);
-                $this->session->set_flashdata('mensaje', 'Venta actualizada correctamente.');
-                redirect('ventas');
-            } else {
-                $this->session->set_flashdata('error', validation_errors());
-            }
-        }
-
-        $data['venta'] = $this->Compra_model->obtener_venta_por_id($idVenta);
-        if (!$data['venta']) {
-            show_404();
-        }
-
-        $this->load->view('templates/header');
-        $this->load->view('templates/navbar');
-        $this->load->view('templates/sidebar');
-        $this->load->view('ventas/editar', $data);
-        $this->load->view('templates/footer');
-    }
-
-    public function eliminar($idVenta) {
-        $this->Venta_model->eliminar_venta($idVenta);
-        $this->session->set_flashdata('mensaje', 'Venta eliminada correctamente.');
-        redirect('ventas');
-    }
+    }    
 }
-?>

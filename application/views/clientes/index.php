@@ -35,7 +35,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($clientes as $cliente): ?>
+                                    <?php foreach ($cliente as $cliente): ?>
                                         <tr>
                                             <td><?= $cliente['nombre'] ?></td>
                                             <td><?= $cliente['tipoDocumento'] ?></td>

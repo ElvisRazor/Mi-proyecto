@@ -11,7 +11,7 @@ class Proveedores extends CI_Controller {
     }
 
     public function index() {
-        $data['proveedores'] = $this->Proveedor_model->obtener_proveedores_activos();
+        $data['proveedor'] = $this->Proveedor_model->obtener_proveedores_activos();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
@@ -118,7 +118,7 @@ class Proveedores extends CI_Controller {
     }
 
     public function eliminados() {
-        $data['proveedores'] = $this->Proveedor_model->obtener_proveedores_eliminados();
+        $data['proveedor'] = $this->Proveedor_model->obtener_proveedores_eliminados();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');

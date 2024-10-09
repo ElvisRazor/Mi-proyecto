@@ -37,7 +37,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($compras as $compra): ?>
+                                    <?php foreach ($compra as $compra): ?>
                                         <tr>
                                             <td><?= $compra['idProveedor'] ?></td>
                                             <td><?= $compra['idUsuario'] ?></td>

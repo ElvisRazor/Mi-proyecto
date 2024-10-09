@@ -35,7 +35,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($productos as $producto): ?>
+                                    <?php foreach ($producto as $producto): ?>
                                         <tr>
                                             <td><?= $producto['nombre'] ?></td>
                                             <td><?= $producto['codigo'] ?></td>
@@ -74,9 +74,6 @@
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item"
                                                             href="<?= site_url('productos/editar/' . $producto['idProducto']) ?>">Editar</a>
-                                                        <a class="dropdown-item"
-                                                            href="<?= site_url('productos/eliminar/' . $producto['idProducto']) ?>"
-                                                            onclick="return confirm('¿Estás seguro de que deseas eliminar este Producto?');">Eliminar</a>
                                                     </div>
                                                 </div>
                                             </td>

@@ -35,7 +35,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($proveedores as $proveedor): ?>
+                                    <?php foreach ($proveedor as $proveedor): ?>
                                         <tr>
                                             <td><?= $proveedor['nombre'] ?></td>
                                             <td><?= $proveedor['tipoDocumento'] ?></td>

@@ -12,7 +12,7 @@ class Productos extends CI_Controller {
     }
 
     public function index() {
-        $data['productos'] = $this->Producto_model->obtener_productos_activos();
+        $data['producto'] = $this->Producto_model->obtener_productos_activos();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
@@ -65,7 +65,7 @@ class Productos extends CI_Controller {
             }
         }
     
-        $data['categorias'] = $this->Producto_model->obtener_categorias();
+        $data['categoria'] = $this->Producto_model->obtener_categorias();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
@@ -115,7 +115,7 @@ class Productos extends CI_Controller {
             show_404();
         }
     
-        $data['categorias'] = $this->Producto_model->obtener_categorias();
+        $data['categoria'] = $this->Producto_model->obtener_categorias();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');

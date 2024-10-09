@@ -15,27 +15,24 @@
             <p class="email"><a></a></p>
         </div>
         <ul class="metismenu" id="menu">
-            <li class="nav-label first">DASHBOARD</li>
-            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-144-layout"></i>
+            <li class="nav-label">Menú</li>
+            <li><a href="<?php echo base_url(); ?>index.php/dashboard">
+                    <i class="flaticon-144-layout"></i> <!-- Icono de Dashboard -->
                     <span class="nav-text">Dashboard</span>
                 </a>
-                <ul>
-                    <li><a href="<?php echo base_url(); ?>index.php/dashboard">Dashboard</a></li>
-                </ul>
             </li>
-            <li class="nav-label">Menú</li>
+            <li class="nav-label">Componentes</li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-077-menu-1"></i>
-                    <span class="nav-text">Almacen</span>
+                    <i class="fas fa-boxes"></i> <!-- Icono para Almacén -->
+                    <span class="nav-text">Almacén</span>
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="<?php echo base_url(); ?>index.php/productos">Productos</a></li>
-                    <li><a href="<?php echo base_url(); ?>index.php/categorias">Categorias</a></li>
+                    <li><a href="<?php echo base_url(); ?>index.php/categorias">Categorías</a></li>
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-061-puzzle"></i>
+                    <i class="fa fa-shopping-cart"></i> <!-- Icono de Compras -->
                     <span class="nav-text">Compras</span>
                 </a>
                 <ul aria-expanded="false">
@@ -44,7 +41,7 @@
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-061-puzzle"></i>
+                    <i class="fa fa-shopping-bag"></i> <!-- Icono para Ventas -->
                     <span class="nav-text">Ventas</span>
                 </a>
                 <ul aria-expanded="false">
@@ -53,16 +50,15 @@
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-061-puzzle"></i>
+                    <i class="flaticon-381-user-9"></i> <!-- Icono de Accesos (user) -->
                     <span class="nav-text">Accesos</span>
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="<?php echo base_url(); ?>index.php/usuarios">Usuarios</a></li>
-                    
                 </ul>
             </li>
             <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-061-puzzle"></i>
+                    <i class="flaticon-381-file"></i> <!-- Icono de Detalles (file) -->
                     <span class="nav-text">Detalles</span>
                 </a>
                 <ul aria-expanded="false">
@@ -70,9 +66,15 @@
                     <li><a href="chart-morris.html">Consulta Ventas</a></li>
                 </ul>
             </li>
+            <li class="nav-label">Configuraciones</li>
+            <li><a href="#" class="ai-icon" aria-expanded="false">
+                    <i class="flaticon-381-settings-2"></i>
+                    <span class="nav-text">Configuraciones</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
 <!--**********************************
-            Sidebar end
-        ***********************************-->
+        Sidebar end
+***********************************-->

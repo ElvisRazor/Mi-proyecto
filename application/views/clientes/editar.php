@@ -59,12 +59,6 @@
                                         <input type="email" name="email" class="form-control" id="email" value="<?= $cliente['email'] ?>" required>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-md-6">
-                                    <div class="form-group">
-                                        <label for="password" class="form-label">Contraseña (opcional):</label>
-                                        <input type="password" name="password" class="form-control" id="password">
-                                    </div>
-                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                         </form>

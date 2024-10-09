@@ -37,7 +37,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($usuarios as $usuario): ?>
+                                    <?php foreach ($usuario as $usuario): ?>
                                         <tr>
                                             <td><?= $usuario['nombre'] ?></td>
                                             <td><?= $usuario['email'] ?></td>
@@ -56,10 +56,6 @@
                                                     <span class="badge light badge-success">Administrador</span>
                                                 <?php elseif ($usuario['rol'] == 'vendedor'): ?>
                                                     <span class="badge light badge-warning">Vendedor</span>
-                                                <?php elseif ($usuario['rol'] == 'cliente'): ?>
-                                                    <span class="badge light badge-danger">Cliente</span>
-                                                <?php elseif ($usuario['rol'] == 'proveedor'): ?>
-                                                    <span class="badge light badge-danger">Proveedor</span>
                                                 <?php else: ?>
                                                     <span class="badge light badge-secondary">Desconocido</span>
                                                 <?php endif; ?>

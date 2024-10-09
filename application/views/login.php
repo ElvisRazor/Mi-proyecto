@@ -128,11 +128,6 @@
                             <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-12 text-center">
-                            <a href="<?= base_url('recuperar_contrasena') ?>" class="text-sm"><b>Olvidé mi contraseña</b></a>
-                        </div>
-                    </div>
                 <?= form_close() ?>
             </div>
         </div>

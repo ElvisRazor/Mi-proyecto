@@ -70,8 +70,6 @@
                                             <option value="">Seleccione rol</option>
                                             <option value="administrador" <?= set_select('rol', 'administrador') ?>>Administrador</option>
                                             <option value="vendedor" <?= set_select('rol', 'vendedor') ?>>Vendedor</option>
-                                            <option value="cliente" <?= set_select('rol', 'cliente') ?>>Cliente</option>
-                                            <option value="proveedor" <?= set_select('rol', 'proveedor') ?>>Proveedor</option>
                                         </select>
                                     </div>
                                 </div>

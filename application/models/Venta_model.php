@@ -6,36 +6,72 @@ class Venta_model extends CI_Model {
     public function __construct() {
         $this->load->database();
     }
-
-    // Obtener todas las ventas activas
+    // Obtener todas las compras activas
     public function obtener_ventas() {
-        $this->db->where('estado', 1); // Solo ventas activas
-        $query = $this->db->get('ventas');
+        $this->db->where('estado', 1); // Solo compras activas
+        $query = $this->db->get('venta');
         return $query->result_array(); // Devuelve todos los resultados como un array
     }
 
-    // Agregar una nueva venta
-    public function agregar_venta($data) {
-        return $this->db->insert('ventas', $data);
+    // Iniciar una nueva transacción de venta
+    public function iniciar_transaccion() {
+        $this->db->trans_begin();  // Inicia una transacción
     }
 
-    // Editar una venta existente
-    public function editar_venta($idVenta, $data) {
-        $this->db->where('idVenta', $idVenta);
-        return $this->db->update('ventas', $data);
+    public function finalizar_transaccion() {
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();  // Revertir si hay error
+            return FALSE;
+        } else {
+            $this->db->trans_commit();  // Confirmar si todo va bien
+            return TRUE;
+        }
     }
 
-    // Obtener una venta por ID
-    public function obtener_venta_por_id($idVenta) {
-        $this->db->where('idVenta', $idVenta);
-        $query = $this->db->get('ventas');
+    public function agregar_venta($data, $detalles) {
+        // Insertar datos de la venta
+        $this->db->insert('venta', $data);
+        $idVenta = $this->db->insert_id();
+
+        // Insertar los detalles de los productos vendidos
+        foreach ($detalles as $detalle) {
+            $detalle['idVenta'] = $idVenta;
+            $this->db->insert('detalleventa', $detalle);
+
+            // Actualizar el stock del producto
+            $this->db->set('stock', 'stock - ' . (int)$detalle['cantidad'], FALSE);
+            $this->db->where('idProducto', $detalle['idProducto']);
+            $this->db->update('producto');
+        }
+
+        return $this->finalizar_transaccion();
+    }
+
+    // Obtener los productos con stock
+    public function obtener_productos_con_stock() {
+        $this->db->where('stock >', 0);
+        $query = $this->db->get('producto');
+        return $query->result_array();
+    }
+
+    // Obtener producto por ID
+    public function obtener_producto_por_id($idProducto) {
+        $this->db->where('idProducto', $idProducto);
+        $query = $this->db->get('producto');
         return $query->row_array();
     }
 
-    // Eliminar una venta (cambiar el estado a inactivo)
-    public function eliminar_venta($idVenta) {
-        $this->db->where('idVenta', $idVenta);
-        return $this->db->update('ventas', ['estado' => 0]);
+    // Obtener cliente por ID
+    public function obtener_cliente_por_id($idCliente) {
+        $this->db->where('idCliente', $idCliente);
+        $query = $this->db->get('cliente');
+        return $query->row_array();
     }
+
+    public function obtener_clientes() {
+        $this->db->where('estado', 1); // Solo clientes activos
+        $query = $this->db->get('cliente');
+        return $query->result_array(); // Devuelve todos los resultados como un array
+    }
+    
 }
-?>

@@ -12,7 +12,7 @@ class Usuarios extends CI_Controller {
     }
 
     public function index() {
-        $data['usuarios'] = $this->Usuario_model->obtener_usuarios_activos();
+        $data['usuario'] = $this->Usuario_model->obtener_usuarios_activos();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');
@@ -117,7 +117,7 @@ class Usuarios extends CI_Controller {
         }
 
         $data['tipos_documento'] = ['Ci/Nit', 'Pasaporte'];
-        $data['roles'] = ['vendedor', 'administrador', 'cliente', 'proveedor'];
+        $data['roles'] = ['vendedor', 'administrador'];
 
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');

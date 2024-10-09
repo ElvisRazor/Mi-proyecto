@@ -11,7 +11,7 @@ class Compras extends CI_Controller {
     }
 
     public function index() {
-        $data['compras'] = $this->Compra_model->obtener_compras();
+        $data['compra'] = $this->Compra_model->obtener_compras();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
         $this->load->view('templates/sidebar');

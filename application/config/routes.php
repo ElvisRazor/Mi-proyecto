@@ -55,6 +55,7 @@ $route['ventas/editar/(:num)'] = 'ventas/editar/$1'; // Ruta para editar una ven
 $route['ventas/eliminar/(:num)'] = 'ventas/eliminar/$1'; // Ruta para eliminar una venta específica
 $route['ventas/eliminados'] = 'ventas/eliminados'; // Ruta para listar las ventas eliminadas
 $route['ventas/habilitar/(:num)'] = 'ventas/habilitar/$1'; // Ruta para habilitar una venta eliminada
+$route['ventas/imprimir/(:num)'] = 'ventas/imprimir/$1';
 
 // Rutas para Productos
 $route['productos'] = 'productos/index'; // Página principal de productos

@@ -27,21 +27,21 @@
                                     <tr>
                                         <th><strong>N°</strong></th>
                                         <th><strong>Cliente</strong></th>
-                                        <th><strong>Usuario</strong></th>
+                                        <th><strong>Producto</strong></th>
                                         <th><strong>Número Comprobante</strong></th>
                                         <th><strong>SubTotal</strong></th>
                                         <th><strong>Descuento</strong></th>
                                         <th><strong>Total Venta</strong></th>
                                         <th><strong>Estado</strong></th>
-                                        <th><strong>Acciones</strong></th>
+                                        <th><strong>Imprimir</strong></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($venta as $item): ?>
                                         <tr>
                                             <td><?= htmlspecialchars($item['idVenta']) ?></td>
-                                            <td><?= htmlspecialchars($item['idCliente']) ?></td>
-                                            <td><?= htmlspecialchars($item['idUsuario']) ?></td>
+                                            <td><?= htmlspecialchars($item['nombre_cliente']) ?></td>
+                                            <td><?= htmlspecialchars($item['nombre_producto']) ?></td>
                                             <td><?= htmlspecialchars($item['numComprobante']) ?></td>
                                             <td><?= htmlspecialchars($item['subTotalVenta']) ?></td>
                                             <td><?= htmlspecialchars($item['descuento']) ?></td>
@@ -50,8 +50,11 @@
                                                 <?= ($item['estado'] == 1) ? 'Activo' : 'Inactivo' ?>
                                             </td>
                                             <td>
-                                                <a href="<?= site_url('ventas/editar/'.$item['idVenta']) ?>" class="btn btn-info btn-sm">Editar</a>
-                                                <a href="<?= site_url('ventas/eliminar/'.$item['idVenta']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta Venta?');">Eliminar</a>
+                                            <a href="<?= site_url('ventas/imprimir/'.$item['idVenta']) ?>" class="btn btn-primary btn-sm" target="_blank">
+                                                <i class="fa fa-print"></i> Imprimir
+                                            </a>
+                                            <!--<a href="<?= site_url('ventas/editar/'.$item['idVenta']) ?>" class="btn btn-info btn-sm">Editar</a>
+                                                <a href="<?= site_url('ventas/eliminar/'.$item['idVenta']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta Venta?');">Eliminar</a>-->
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

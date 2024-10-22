@@ -6,6 +6,12 @@
                     <h4>Agregar Producto</h4>
                 </div>
             </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="<?= site_url('productos') ?>">Productos</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0)">Agregar</a></li>
+                        </ol>
+                    </div>
         </div>
 
         <div class="row">
@@ -25,6 +31,11 @@
                                 <label for="codigo">Código</label>
                                 <input type="text" class="form-control" id="codigo" name="codigo" value="<?= set_value('codigo') ?>" required>
                                 <?= form_error('codigo') ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="codigo">Precio</label>
+                                <input type="text" class="form-control" id="precio" name="precio" value="<?= set_value('precio') ?>" required>
+                                <?= form_error('precio') ?>
                             </div>
                             <div class="form-group">
                                 <label for="stock">Stock</label>

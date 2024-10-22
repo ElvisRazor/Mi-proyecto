@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="<?= site_url('productos/agregar') ?>">Agregar Nuevo</a></li>
+                    <li class="breadcrumb-item"><a href="<?= site_url('productos/agregar') ?>">Agregar Nueva</a></li>
                 </ol>
             </div>
         </div>
@@ -27,6 +27,7 @@
                                     <tr>
                                         <th><strong>Nombre</strong></th>
                                         <th><strong>Código</strong></th>
+                                        <th><strong>Precio</strong></th>
                                         <th><strong>Stock</strong></th>
                                         <th><strong>Descripción</strong></th>
                                         <th><strong>Imagen</strong></th>
@@ -39,6 +40,7 @@
                                         <tr>
                                             <td><?= $producto['nombre'] ?></td>
                                             <td><?= $producto['codigo'] ?></td>
+                                            <td><?= $producto['precio'] ?></td>
                                             <td><?= $producto['stock'] ?></td>
                                             <td><?= $producto['descripcion'] ?></td>
                                             <td>

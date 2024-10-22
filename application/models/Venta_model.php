@@ -83,4 +83,35 @@ class Venta_model extends CI_Model {
         $query = $this->db->get('cliente');
         return $query->result_array(); // Devuelve todos los resultados como un array
     }
+    //#################3
+    // Obtener ventas de la semana actual
+    public function obtener_ventas_semanales() {
+        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 week')));
+        return $this->db->count_all_results('venta');
+    }
+
+    // Obtener ventas del mes actual
+    public function obtener_ventas_mensuales() {
+        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 month')));
+        return $this->db->count_all_results('venta');
+    }
+
+    // Obtener ventas de la semana anterior
+    public function obtener_ventas_semana_anterior() {
+        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-2 weeks')));
+        $this->db->where('fechaRegistro <', date('Y-m-d H:i:s', strtotime('-1 week')));
+        return $this->db->count_all_results('venta');
+    }
+
+    // Obtener ventas del mes anterior
+    public function obtener_ventas_mes_anterior() {
+        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-2 months')));
+        $this->db->where('fechaRegistro <', date('Y-m-d H:i:s', strtotime('-1 month')));
+        return $this->db->count_all_results('venta');
+    }
+    // Obtener ventas de hoy
+    public function obtener_ventas_hoy() {
+        $this->db->where('DATE(fechaRegistro)', date('Y-m-d'));
+        return $this->db->count_all_results('venta');
+    }
 }

@@ -3,17 +3,16 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Compras</h4>
-                    <p class="mb-0">Lista de Compras Activas</p>
+                    <h4>COMPRAS</h4>
+                    <p class="mb-0">Lista de Compras</p>
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="<?= site_url('compras/agregar') ?>">Agregar Nueva</a></li>
+                    <li class="breadcrumb-item"><a href="<?= site_url('compras/agregar') ?>">Realizar Nueva Compra</a></li>
                 </ol>
             </div>
         </div>
-
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -26,36 +25,29 @@
                                 <thead>
                                     <tr>
                                         <th><strong>Proveedor</strong></th>
-                                        <th><strong>Usuario</strong></th>
-                                        <th><strong>Tipo Comprobante</strong></th>
-                                        <th><strong>Serie Comprobante</strong></th>
+                                        <th><strong>Producto</strong></th>
                                         <th><strong>Número Comprobante</strong></th>
-                                        <th><strong>Impuesto</strong></th>
                                         <th><strong>Total Compra</strong></th>
                                         <th><strong>Estado</strong></th>
-                                        <th><strong>Acciones</strong></th>
+                                        <th><strong>Imprimir</strong></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($compra as $compra): ?>
+                                    <?php foreach ($compra as $item): ?>
                                         <tr>
-                                            <td><?= $compra['idProveedor'] ?></td>
-                                            <td><?= $compra['idUsuario'] ?></td>
-                                            <td><?= $compra['tipoComprobante'] ?></td>
-                                            <td><?= $compra['serieComprobante'] ?></td>
-                                            <td><?= $compra['numComprobante'] ?></td>
-                                            <td><?= $compra['impuesto'] ?></td>
-                                            <td><?= $compra['totalCompra'] ?></td>
+                                            <td><?= htmlspecialchars($item['nombre_proveedor']) ?></td>
+                                            <td><?= htmlspecialchars($item['nombre_producto']) ?></td>
+                                            <td><?= htmlspecialchars($item['numComprobante']) ?></td>
+                                            <td><?= htmlspecialchars($item['totalCompra']) ?></td>
                                             <td>
-                                                <?php if ($compra['estado'] == 1): ?>
-                                                    Activo
-                                                <?php else: ?>
-                                                    Inactivo
-                                                <?php endif; ?>
+                                                <?= ($item['estado'] == 1) ? 'Activo' : 'Inactivo' ?>
                                             </td>
                                             <td>
-                                                <a href="<?= site_url('compras/editar/'.$compra['idCompra']) ?>" class="btn btn-info btn-sm">Editar</a>
-                                                <a href="<?= site_url('compras/eliminar/'.$compra['idCompra']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta compra?');">Eliminar</a>
+                                            <a href="<?= site_url('compras/imprimir/'.$item['idCompra']) ?>" class="btn btn-primary btn-sm" target="_blank">
+                                                <i class="fa fa-print"></i> Imprimir
+                                            </a>
+                                            <!--<a href="<?= site_url('compras/editar/'.$item['idCompra']) ?>" class="btn btn-info btn-sm">Editar</a>
+                                                <a href="<?= site_url('compras/eliminar/'.$item['idCompra']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta Compra?');">Eliminar</a>-->
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

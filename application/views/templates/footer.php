@@ -39,5 +39,4 @@
 <script src="<?php echo base_url(); ?>/assets/js/styleSwitcher.js"></script>
 
 </body>
-
 </html>

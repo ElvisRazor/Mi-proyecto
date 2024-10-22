@@ -24,6 +24,7 @@ class Productos extends CI_Controller {
         if ($this->input->post()) {
             $this->form_validation->set_rules('nombre', 'Nombre', 'required');
             $this->form_validation->set_rules('codigo', 'Código', 'required');
+            $this->form_validation->set_rules('precio', 'Precio', 'required|numeric');
             $this->form_validation->set_rules('stock', 'Stock', 'required|numeric');
             $this->form_validation->set_rules('descripcion', 'Descripción', 'required');
             $this->form_validation->set_rules('idCategoria', 'Categoría', 'required');
@@ -48,6 +49,7 @@ class Productos extends CI_Controller {
                 $data = [
                     'nombre' => $this->input->post('nombre'),
                     'codigo' => $this->input->post('codigo'),
+                    'precio' => $this->input->post('precio'),
                     'stock' => $this->input->post('stock'),
                     'descripcion' => $this->input->post('descripcion'),
                     'idCategoria' => $this->input->post('idCategoria'),
@@ -77,6 +79,7 @@ class Productos extends CI_Controller {
         if ($this->input->post()) {
             $this->form_validation->set_rules('nombre', 'Nombre', 'required');
             $this->form_validation->set_rules('codigo', 'Código', 'required');
+            $this->form_validation->set_rules('precio', 'Precio', 'required|numeric');
             $this->form_validation->set_rules('stock', 'Stock', 'required|numeric');
             $this->form_validation->set_rules('descripcion', 'Descripción', 'required');
             $this->form_validation->set_rules('idCategoria', 'Categoría', 'required');
@@ -96,6 +99,7 @@ class Productos extends CI_Controller {
                 $data = [
                     'nombre' => $this->input->post('nombre'),
                     'codigo' => $this->input->post('codigo'),
+                    'precio' => $this->input->post('precio'),
                     'stock' => $this->input->post('stock'),
                     'descripcion' => $this->input->post('descripcion'),
                     'idCategoria' => $this->input->post('idCategoria'),

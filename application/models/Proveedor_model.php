@@ -57,5 +57,21 @@ class Proveedor_model extends CI_Model {
         $query = $this->db->get('proveedor');
         return $query->row_array();
     }
+    // Contar el número total de productos
+    public function contar_proveedores() {
+        return $this->db->count_all('proveedor');
+    }
+    // Calcular el incremento de productos en la última semana
+    public function calcular_incremento_proveedores() {
+        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 week')));
+        $nuevos_proveedores = $this->db->count_all_results('proveedor');
+
+        $total_proveedores = $this->contar_proveedores();
+        if ($total_proveedores > 0) {
+            return ($nuevos_proveedores / $total_proveedores) * 100;
+        } else {
+            return 0;
+        }
+    }
 }
 ?>

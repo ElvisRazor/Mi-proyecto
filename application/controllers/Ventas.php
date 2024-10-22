@@ -220,6 +220,85 @@ class Ventas extends CI_Controller {
         // Salida del PDF
         $pdf->Output('recibo_venta_' . $venta['numComprobante'] . '.pdf', 'I');
     }
+    public function imprimirTodas() {
+        // Obtener todas las ventas
+        $ventas = $this->Venta_model->obtener_ventas();
+        
+        if (empty($ventas)) {
+            $this->session->set_flashdata('error', 'No hay ventas para mostrar.');
+            redirect('ventas');
+        }
     
+        // Crear el PDF
+        $pdf = new TCPDF();
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle('Reporte de Ventas');
+        
+        // Configuración de encabezado y pie de página
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->AddPage();
     
+        // Agregar imagen de membretado como marca de agua
+        $imagePath = FCPATH . 'assets/img/pisosbol2.PNG'; // Ruta relativa
+        if (file_exists($imagePath)) {
+            // Obtener dimensiones de la imagen
+            list($width, $height) = getimagesize($imagePath);
+            
+            // Calcular la posición para centrar la imagen
+            $scaleFactor = 0.3; // Ajusta el factor para aumentar el tamaño
+            $x = ($pdf->getPageWidth() - ($width * $scaleFactor)) / 2; 
+            $y = ($pdf->getPageHeight() - ($height * $scaleFactor)) / 2; 
+            
+            // Establecer opacidad
+            $pdf->SetAlpha(0.3);
+            $pdf->Image($imagePath, $x, $y, $width * $scaleFactor, $height * $scaleFactor, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
+            $pdf->SetAlpha(1);
+        } else {
+            $pdf->SetFont('helvetica', 'B', 12);
+            $pdf->Cell(0, 10, 'Error: No se pudo cargar la imagen de membretado.', 0, 1, 'C', 0, '', 0, false, 'T', 'M');
+        }
+    
+        // Establecer contenido del PDF
+        $html = '
+        <h1 style="text-align:center; color:#0c4b93;">Reporte de Ventas</h1>
+        <table border="1" cellpadding="5" style="border-collapse: collapse; width:100%;">
+            <thead>
+                <tr style="background-color: #0c4b93; color: white;">
+                    <th style="text-align:left;">Cliente</th>
+                    <th style="text-align:left;">Producto</th>
+                    <th style="text-align:left;">Número Comprobante</th>
+                    <th style="text-align:right;">Total Venta</th>
+                    <th style="text-align:right;">Estado</th>
+                </tr>
+            </thead>
+            <tbody>';
+    
+        foreach ($ventas as $item) {
+            $html .= '<tr>
+                        <td>' . htmlspecialchars($item['nombre_cliente']) . '</td>
+                        <td>' . htmlspecialchars($item['nombre_producto']) . '</td>
+                        <td>' . htmlspecialchars($item['numComprobante']) . '</td>
+                        <td style="text-align:right;">' . htmlspecialchars($item['totalVenta']) . '</td>
+                        <td style="text-align:right;">' . (($item['estado'] == 1) ? 'Activo' : 'Inactivo') . '</td>
+                    </tr>';
+        }
+    
+        $html .= '</tbody>
+                  </table>';
+    
+        // Agregar contenido al PDF
+        $pdf->writeHTML($html, true, false, true, false, '');
+    
+        // Agregar información de contacto al final del contenido
+        $pdf->SetY($pdf->GetY() + 10);
+        $pdf->SetFont('helvetica', 'I', 10);
+        $pdf->Cell(0, 10, 'C. Esteban Arze entre Ladislao Cabrera, Cochabamba, Bolivia', 0, 1, 'C');
+        $pdf->Cell(0, 10, 'Contacto: +591 77950114', 0, 1, 'C');
+    
+        // Salida del PDF
+        $pdf->Output('reporte_ventas.pdf', 'I');
+    }    
 }

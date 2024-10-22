@@ -58,5 +58,21 @@ class Producto_model extends CI_Model {
         $query = $this->db->get('producto'); // Consultar la tabla 'producto'
         return $query->result_array(); // Devolver los productos como un array
     }
+    // Contar el número total de productos
+    public function contar_productos() {
+        return $this->db->count_all('producto');
+    }
+    // Calcular el incremento de productos en la última semana
+    public function calcular_incremento_productos() {
+        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 week')));
+        $nuevos_productos = $this->db->count_all_results('producto');
+
+        $total_productos = $this->contar_productos();
+        if ($total_productos > 0) {
+            return ($nuevos_productos / $total_productos) * 100;
+        } else {
+            return 0;
+        }
+    }
 }
 ?>

@@ -27,6 +27,11 @@
                                 <?= form_error('codigo') ?>
                             </div>
                             <div class="form-group">
+                                <label for="codigo">Precio</label>
+                                <input type="text" class="form-control" id="precio" name="precio" value="<?= set_value('precio', $producto['precio']) ?>" required>
+                                <?= form_error('precio') ?>
+                            </div>
+                            <div class="form-group">
                                 <label for="stock">Stock</label>
                                 <input type="number" class="form-control" id="stock" name="stock" value="<?= set_value('stock', $producto['stock']) ?>" required>
                                 <?= form_error('stock') ?>

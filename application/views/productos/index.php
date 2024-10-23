@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="<?= site_url('productos/agregar') ?>">Agregar Nueva</a></li>
+                    <li class="breadcrumb-item"><a href="<?= site_url('productos/agregar') ?>">Agregar Nuevo Producto</a></li>
                 </ol>
             </div>
         </div>
@@ -19,6 +19,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Lista de Productos</h4>
+                        <a href="<?= site_url('productos/imprimir') ?>" target="_blank" class="btn btn-primary float-right" style="margin-left: 15px;">
+                            <i class="fa fa-print"></i> Imprimir Lista de Productos
+                        </a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -61,11 +64,9 @@
                                             </td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <button type="button" class="btn btn-success light sharp"
-                                                        data-toggle="dropdown">
+                                                    <button type="button" class="btn btn-success light sharp" data-toggle="dropdown">
                                                         <svg width="20px" height="20px" viewbox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none"
-                                                                fill-rule="evenodd">
+                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                 <rect x="0" y="0" width="24" height="24"></rect>
                                                                 <circle fill="#000000" cx="5" cy="12" r="2"></circle>
                                                                 <circle fill="#000000" cx="12" cy="12" r="2"></circle>
@@ -74,8 +75,7 @@
                                                         </svg>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item"
-                                                            href="<?= site_url('productos/editar/' . $producto['idProducto']) ?>">Editar</a>
+                                                        <a class="dropdown-item" href="<?= site_url('productos/editar/' . $producto['idProducto']) ?>">Editar</a>
                                                     </div>
                                                 </div>
                                             </td>

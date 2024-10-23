@@ -27,6 +27,7 @@
                             <table id="example3" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
+                                        <th><strong>N°</strong></th>
                                         <th><strong>Cliente</strong></th>
                                         <th><strong>Producto</strong></th>
                                         <th><strong>Número Comprobante</strong></th>
@@ -40,6 +41,7 @@
                                 <tbody>
                                     <?php foreach ($venta as $item): ?>
                                         <tr>
+                                            <td><?= htmlspecialchars($item['idVenta']) ?></td>
                                             <td><?= htmlspecialchars($item['nombre_cliente']) ?></td>
                                             <td><?= htmlspecialchars($item['nombre_producto']) ?></td>
                                             <td><?= htmlspecialchars($item['numComprobante']) ?></td>

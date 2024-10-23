@@ -10,6 +10,7 @@
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<?= site_url('compras') ?>">Lista de Compras</a></li>
+                    <li class="breadcrumb-item"><a href="<?= site_url('compras/consulta') ?>">Realizar Consulta</a></li>
                 </ol>
             </div>
         </div>
@@ -23,15 +24,12 @@
                         <?= form_open_multipart('compras/agregar') ?>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="idProveedor">Proveedor</label>
+                                    <label for="proveedorLabel">Proveedor</label>
+                                    <span id="proveedorLabel" class="form-control mt-2" style="display: inline-block;">Selecciona un proveedor</span>
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalProveedores">
                                         Buscar Proveedor
                                     </button>
-                                    <select class="form-control mt-2" id="idProveedor" name="idProveedor" required>
-                                        <?php foreach ($proveedor as $item): ?>
-                                            <option value="<?= htmlspecialchars($item['idProveedor']) ?>"><?= htmlspecialchars($item['nombre']) ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <input type="hidden" id="idProveedor" name="idProveedor" required>
                                     <?= form_error('idProveedor') ?>
                                 </div>
                             </div>
@@ -132,12 +130,13 @@
                                     detallesCompra.insertAdjacentHTML('beforeend', nuevaFila);
                                     productosAgregados.add(id); // Agregar el producto al conjunto
                                     $('#modalProductos').modal('hide'); // Cerrar el modal
+                                    calcularTotalCompra(); // Recalcular el total de la compra
                                 }
 
                                 function seleccionarProveedor(id, nombre) {
                                     document.getElementById('idProveedor').value = id;
-                                    document.getElementById('idProveedor').style.display = 'block';
-                                    $('#modalProveedores').modal('hide');
+                                    document.getElementById('proveedorLabel').innerText = nombre; // Mostrar el nombre del proveedor en el label
+                                    $('#modalProveedores').modal('hide'); // Cerrar el modal
                                 }
 
                                 function calcularTotalCompra() {
@@ -163,6 +162,22 @@
                                     row.remove();
                                     calcularTotalCompra(); // Recalcular el total de la compra
                                 }
+
+                                function cancelarCompraFormulario() {
+                                    // Limpiar el formulario de compra
+                                    document.getElementById('idProveedor').value = '';
+                                    document.getElementById('proveedorLabel').innerText = 'Selecciona un proveedor'; // Restablecer el proveedor
+                                    document.getElementById('detallesCompra').getElementsByTagName('tbody')[0].innerHTML = ''; // Limpiar productos
+                                    calcularTotalCompra(); // Recalcular total
+                                }
+
+                                function cancelarVenta() {
+                                    // Limpiar el formulario de venta
+                                    document.getElementById('idCliente').value = '';
+                                    document.getElementById('clienteSeleccionado').innerText = 'Ninguno';
+                                    document.getElementById('detallesVenta').getElementsByTagName('tbody')[0].innerHTML = ''; // Limpiar productos
+                                    calcularTotalVenta(); // Recalcular total
+                                }
                             </script>
 
                             <br>
@@ -186,7 +201,8 @@
                                 <label id="totalCompra" class="form-control" readonly>0.00</label>
                                 <?= form_error('totalCompra') ?>
                             </div>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="submit" class="btn btn-success">Guardar Compra</button>
+                            <button type="button" class="btn btn-danger" onclick="cancelarCompraFormulario()">Cancelar Compra</button>
                         <?= form_close() ?>
                     </div>
                 </div>

@@ -9,6 +9,7 @@ class Productos extends CI_Controller {
         $this->load->helper(['url', 'form']);
         $this->load->library(['session', 'form_validation', 'upload']);
         $this->load->config('upload');
+        require_once(APPPATH . 'libraries/tcpdf/tcpdf.php'); // Cargar TCPDF manualmente
     }
 
     public function index() {
@@ -131,6 +132,79 @@ class Productos extends CI_Controller {
         $this->Producto_model->eliminar_producto($idProducto);
         $this->session->set_flashdata('mensaje', 'Producto eliminado correctamente.');
         redirect('productos');
+    }
+    public function imprimir() {
+        // Obtener todos los productos
+        $productos = $this->Producto_model->obtener_productos_activos();
+    
+        if (empty($productos)) {
+            $this->session->set_flashdata('error', 'No se encontraron productos para imprimir.');
+            redirect('productos');
+        }
+    
+        // Crear el PDF
+        $pdf = new TCPDF();
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->SetPrintHeader(false);
+        $pdf->AddPage();
+    
+        // Agregar imagen de marca de agua
+        $imagePath = FCPATH . 'assets/img/pisosbol2.PNG';
+        if (file_exists($imagePath)) {
+            list($width, $height) = getimagesize($imagePath);
+            $scaleFactor = 0.3;
+            $x = ($pdf->getPageWidth() - ($width * $scaleFactor)) / 2;
+            $y = ($pdf->getPageHeight() - ($height * $scaleFactor)) / 2;
+            $pdf->SetAlpha(0.3);
+            $pdf->Image($imagePath, $x, $y, $width * $scaleFactor, $height * $scaleFactor, 'PNG');
+            $pdf->SetAlpha(1);
+        } else {
+            $pdf->SetFont('helvetica', 'B', 12);
+            $pdf->Cell(0, 10, 'Error: No se pudo cargar la imagen de membretado.', 0, 1, 'C');
+        }
+    
+        // Contenido del PDF
+        $html = '
+        <h1 style="text-align:center; color:#0c4b93;">Lista de Productos</h1>';
+    
+        $html .= '<table border="1" cellpadding="10" style="border-collapse: collapse; width:100%;">
+                      <thead>
+                          <tr style="background-color: #0c4b93; color: white;">
+                              <th style="text-align:left;">N°</th>
+                              <th style="text-align:left;">Nombre</th>
+                              <th style="text-align:left;">Código</th>
+                              <th style="text-align:left;">Precio</th>
+                              <th style="text-align:left;">Stock</th>
+                              <th style="text-align:left;">Descripción</th>
+                              <th style="text-align:left;">Estado</th>
+                          </tr>
+                      </thead>
+                      <tbody>';
+    
+        foreach ($productos as $producto) {
+            $html .= '<tr>
+                        <td>' . htmlspecialchars($producto['idProducto']) . '</td>
+                        <td>' . htmlspecialchars($producto['nombre']) . '</td>
+                        <td>' . htmlspecialchars($producto['codigo']) . '</td>
+                        <td>' . number_format($producto['precio'], 2) . '</td>
+                        <td>' . htmlspecialchars($producto['stock']) . '</td>
+                        <td>' . htmlspecialchars($producto['descripcion']) . '</td>
+                        <td>' . ($producto['estado'] == '1' ? 'ACTIVO' : 'INACTIVO') . '</td>
+                    </tr>';
+        }
+    
+        $html .= '</tbody>
+                  </table>';
+    
+        // Agregar el contenido al PDF
+        $pdf->writeHTML($html, true, false, true, false, '');
+    
+        // Salida del PDF
+        $pdf->Output('resumen_productos.pdf', 'I');
     }
 }
 ?>

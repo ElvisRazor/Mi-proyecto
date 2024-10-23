@@ -118,4 +118,22 @@ class Compra_model extends CI_Model {
         $this->db->where('DATE(fechaRegistro)', date('Y-m-d'));
         return $this->db->count_all_results('compra');
     }
+
+    public function obtener_compras_por_fechas($fechaInicio = null, $fechaFin = null) {
+        $this->db->select('c.idCompra, c.fechaRegistro, p.nombre AS proveedor, SUM(dc.cantidad) AS cantidad_productos, SUM(dc.cantidad * dc.precio) AS total_compra');
+        $this->db->from('compra c');
+        $this->db->join('detalleCompra dc', 'dc.idCompra = c.idCompra');
+        $this->db->join('proveedor p', 'p.idProveedor = c.idProveedor');
+    
+        if (!empty($fechaInicio) && !empty($fechaFin)) {
+            $this->db->where('c.fechaRegistro >=', date('Y-m-d', strtotime($fechaInicio)));
+            $this->db->where('c.fechaRegistro <=', date('Y-m-d', strtotime($fechaFin)));
+        }
+    
+        $this->db->where('c.estado', 1);
+        $this->db->group_by('c.idCompra, c.fechaRegistro, p.nombre');
+        $this->db->order_by('c.fechaRegistro', 'ASC');
+    
+        return $this->db->get()->result_array();
+    }                  
 }

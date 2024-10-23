@@ -266,6 +266,130 @@
 							</div>
 						</div>
 					</div>
+				</div>
+					<div class="row">
+						<div class="col-xl-9 col-xxl-8">
+						    <div class="card">
+						        <div class="card-header border-0 flex-wrap pb-0">
+						            <div class="mb-3">
+						                <h4 class="fs-20 text-black">Compras - Resumen</h4>
+						                <p class="mb-0 fs-12 text-black">Estadísticas de compras semanales y mensuales</p>
+						            </div>
+						            <select id="periodoCompras" class="style-1 btn-secondary default-select">
+						                <option value="semanal">Semanal</option>
+						                <option value="mensual">Mensual</option>
+						            </select>
+						        </div>
+						        <div class="card-body pb-2 px-3">
+						            <canvas id="comprasChart" class="market-line"></canvas>
+						        </div>
+						        <div class="card-footer text-center">
+						            <p class="mb-0 fs-13">
+						                <span class="text-success mr-1">Incremento Semanal: <?php echo number_format($incremento_semanal, 2); ?>%</span>
+						                <br>
+						                <span class="text-success mr-1">Incremento Mensual: <?php echo number_format($incremento_mensual, 2); ?>%</span>
+						                <br>
+						                <span class="text-primary mr-1">Compras de Hoy: <?php echo $compras_hoy; ?></span>
+						            </p>
+						        </div>
+						    </div>
+						</div>
+
+						<script>
+						    var ctx = document.getElementById('comprasChart').getContext('2d');
+						    var comprasChart = new Chart(ctx, {
+						        type: 'line',
+						        data: {
+						            labels: ['Semana Pasada', 'Esta Semana'], // Para el gráfico semanal
+						            datasets: [{
+						                label: 'Compras',
+						                data: [<?php echo $compras_semana_anterior; ?>, <?php echo $compras_semanales; ?>], // Datos semanales
+						                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						                borderColor: 'rgba(255, 99, 132, 1)',
+						                borderWidth: 1
+						            }]
+						        },
+						        options: {
+						            responsive: true,
+						            scales: {
+						                y: {
+						                    beginAtZero: true
+						                }
+						            }
+						        }
+						    });
+						
+						    // Cambiar el gráfico según el periodo seleccionado
+						    document.getElementById('periodoCompras').addEventListener('change', function() {
+						        var periodo = this.value;
+						        if (periodo === 'semanal') {
+						            comprasChart.data.labels = ['Semana Pasada', 'Esta Semana'];
+						            comprasChart.data.datasets[0].data = [<?php echo $compras_semana_anterior; ?>, <?php echo $compras_semanales; ?>];
+						        } else {
+						            comprasChart.data.labels = ['Mes Pasado', 'Este Mes'];
+						            comprasChart.data.datasets[0].data = [<?php echo $compras_mes_anterior; ?>, <?php echo $compras_mensuales; ?>];
+						        }
+						        comprasChart.update();
+						    });
+						</script>
+					<div class="col-xl-3 col-xxl-4">
+						<div class="card">
+							<div class="card-header border-0 pb-0">
+								<h4 class="fs-20 text-black">Current Statistic</h4>
+							</div>
+							<div class="card-body pb-0">
+								<div id="currentChart" class="current-chart"></div>
+								<div class="chart-content">	
+									<div class="d-flex justify-content-between mb-2 align-items-center">
+										<div>
+											<svg class="mr-2" width="15" height="15" viewbox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect width="15" height="15" rx="7.5" fill="#EB8153"></rect>
+											</svg>
+											<span class="fs-14">Income (66%)</span>
+										</div>
+										<div>
+											<h5 class="mb-0">$167,884.21</h5>
+										</div>
+									</div>
+									<div class="d-flex justify-content-between mb-2 align-items-center">
+										<div>
+											<svg class="mr-2" width="15" height="15" viewbox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect width="15" height="15" rx="7.5" fill="#71B945"></rect>
+											</svg>
+
+											<span class="fs-14">Income (50%)</span>
+										</div>
+										<div>
+											<h5 class="mb-0">$56,411.33</h5>
+										</div>
+									</div>
+									<div class="d-flex justify-content-between mb-2 align-items-center">
+										<div>
+											<svg class="mr-2" width="15" height="15" viewbox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect width="15" height="15" rx="7.5" fill="#4A8CDA"></rect>
+											</svg>
+											<span class="fs-14">Income (11%)</span>
+										</div>
+										<div>
+											<h5 class="mb-0">$81,981.22</h5>
+										</div>
+									</div>
+									<div class="d-flex justify-content-between mb-2 align-items-center">
+										<div>
+											<svg class="mr-2" width="15" height="15" viewbox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect width="15" height="15" rx="7.5" fill="#6647BF"></rect>
+											</svg>
+											<span class="fs-14">Income (23%)</span>
+										</div>
+										<div>
+											<h5 class="mb-0">$12,432.51</h5>
+										</div>
+									</div>
+								</div>	
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
         <!--**********************************

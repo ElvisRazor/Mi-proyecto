@@ -21,6 +21,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Lista De Usuarios</h4>
+                        <a href="<?= site_url('usuarios/imprimir') ?>" target="_blank" class="btn btn-primary float-right" style="margin-left: 15px;">
+                            <i class="fa fa-print"></i> Imprimir Lista de Usuarios
+                        </a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

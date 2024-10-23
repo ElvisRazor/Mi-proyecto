@@ -22,7 +22,8 @@
                 </a>
             </li>
             <li class="nav-label">Componentes</li>
-            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li>
+                <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                     <i class="fas fa-boxes"></i> <!-- Icono para Almacén -->
                     <span class="nav-text">Almacén</span>
                 </a>
@@ -57,15 +58,8 @@
                     <li><a href="<?php echo base_url(); ?>index.php/usuarios">Usuarios</a></li>
                 </ul>
             </li>
-            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-381-file"></i> <!-- Icono de Detalles (file) -->
-                    <span class="nav-text">Detalles</span>
-                </a>
-                <ul aria-expanded="false">
-                    <li><a href="chart-flot.html">Consulta compra</a></li>
-                    <li><a href="chart-morris.html">Consulta Ventas</a></li>
-                </ul>
-            </li>
+            <!-- detalles -->
+              
             <li class="nav-label">Configuraciones</li>
             <li><a href="#" class="ai-icon" aria-expanded="false">
                     <i class="flaticon-381-settings-2"></i>

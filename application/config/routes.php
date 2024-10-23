@@ -47,6 +47,7 @@ $route['compras/editar/(:num)'] = 'compras/editar/$1'; // Ruta para editar una c
 $route['compras/eliminar/(:num)'] = 'compras/eliminar/$1'; // Ruta para eliminar una compra específica
 $route['compras/eliminados'] = 'compras/eliminados'; // Ruta para listar las compras eliminadas
 $route['compras/habilitar/(:num)'] = 'compras/habilitar/$1'; // Ruta para habilitar una compra eliminada
+$route['compras/consulta'] = 'compras/consulta'; // Consulta de compras por fechas
 
 // Ruta para el controlador de ventas
 $route['ventas'] = 'ventas/index'; // Ruta para listar todas las ventas

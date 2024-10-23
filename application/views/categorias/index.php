@@ -18,8 +18,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title">Lista de Categorías</h4>
+                        <a href="<?= site_url('categorias/imprimir_todas') ?>" class="btn btn-primary" target="_blank">
+                            <i class="fa fa-print"></i> Imprimir Lista de Categorías
+                        </a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -48,11 +51,9 @@
                                             </td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <button type="button" class="btn btn-success light sharp"
-                                                        data-toggle="dropdown">
+                                                    <button type="button" class="btn btn-success light sharp" data-toggle="dropdown">
                                                         <svg width="20px" height="20px" viewbox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none"
-                                                                fill-rule="evenodd">
+                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                                 <rect x="0" y="0" width="24" height="24"></rect>
                                                                 <circle fill="#000000" cx="5" cy="12" r="2"></circle>
                                                                 <circle fill="#000000" cx="12" cy="12" r="2"></circle>

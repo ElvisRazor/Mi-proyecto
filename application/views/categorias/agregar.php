@@ -18,7 +18,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Formulario de Agregar Categoría</h4>
+                        <h4 class="card-title">Formulario de Categoría</h4>
                     </div>
                     <div class="card-body">
                         <?php echo form_open(); ?>

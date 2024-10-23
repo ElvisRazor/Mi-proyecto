@@ -23,15 +23,12 @@
                         <?= form_open_multipart('ventas/agregar') ?>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="idCliente">Cliente</label>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalClientes">
+                                    <label for="clienteSeleccionado">Cliente Seleccionado</label>
+                                    <label id="clienteSeleccionado" class="form-control" style="background-color: #f8f9fa;">Ninguno</label>
+                                    <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalClientes">
                                         Buscar Cliente
                                     </button>
-                                    <select class="form-control mt-2" id="idCliente" name="idCliente" required>
-                                        <?php foreach ($cliente as $item): ?>
-                                            <option value="<?= htmlspecialchars($item['idCliente']) ?>"><?= htmlspecialchars($item['nombre']) ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <input type="hidden" id="idCliente" name="idCliente" required>
                                     <?= form_error('idCliente') ?>
                                 </div>
                             </div>
@@ -134,11 +131,12 @@
                                     detallesVenta.insertAdjacentHTML('beforeend', nuevaFila);
                                     productosAgregados.add(id); // Agregar el producto al conjunto
                                     $('#modalProductos').modal('hide'); // Cerrar el modal
+                                    calcularTotalVenta(); // Recalcular el total de la venta
                                 }
 
                                 function seleccionarCliente(id, nombre) {
                                     document.getElementById('idCliente').value = id;
-                                    document.getElementById('idCliente').style.display = 'block';
+                                    document.getElementById('clienteSeleccionado').innerText = nombre; // Actualizar el label con el nombre del cliente
                                     $('#modalClientes').modal('hide');
                                 }
 
@@ -189,56 +187,49 @@
                                     const cantidades = document.querySelectorAll('input[name="cantidad[]"]');
                                     const descuentos = document.querySelectorAll('input[name="descuento[]"]');
 
-                                    subtotales.forEach((subtotal, index) => {
-                                        const subtotalValue = parseFloat(subtotal.innerText);
-                                        const cantidadValue = parseFloat(cantidades[index].value);
-                                        const descuentoValue = parseFloat(descuentos[index].value) || 0;
-
-                                        total += subtotalValue; // Total sin descuentos
-                                        totalDescuento += (cantidadValue * (descuentoValue)); // Total de descuentos aplicados
+                                    subtotales.forEach((subtotalLabel, index) => {
+                                        const subtotal = parseFloat(subtotalLabel.innerText) || 0;
+                                        const cantidad = parseFloat(cantidades[index].value) || 0;
+                                        const descuento = parseFloat(descuentos[index].value) || 0;
+                                        total += subtotal;
+                                        totalDescuento += descuento * cantidad; // Sumar el descuento total
                                     });
 
-                                    document.getElementById('totalVenta').innerText = (total - totalDescuento).toFixed(2); // Total con descuentos
-                                    document.getElementById('totalVentaInput').value = (total - totalDescuento).toFixed(2); // Valor total con descuentos
-                                    document.getElementById('subtotalTotal').innerText = total.toFixed(2); // Mostrar subtotal total
+                                    document.getElementById('totalVenta').innerText = (total - totalDescuento).toFixed(2); // Total final menos descuentos
                                 }
 
-                                function eliminarProducto(button) {
-                                    const row = button.closest('tr');
-                                    const idProducto = row.dataset.id;
-                                    productosAgregados.delete(parseInt(idProducto)); // Eliminar el producto del conjunto
+                                function eliminarProducto(btn) {
+                                    const row = btn.closest('tr');
+                                    const id = row.getAttribute('data-id');
+                                    productosAgregados.delete(id); // Eliminar el producto del conjunto
                                     row.remove();
                                     calcularTotalVenta(); // Recalcular el total de la venta
                                 }
                             </script>
-                            <br>
-                            <table id="detallesVenta" class="table table-bordered">
+                            <table class="table table-bordered" id="detallesVenta">
                                 <thead>
                                     <tr>
                                         <th>Producto</th>
                                         <th>Stock</th>
                                         <th>Cantidad</th>
                                         <th>Precio</th>
-                                        <th>Descuento por Unidad</th>
+                                        <th>Descuento Unitario</th>
                                         <th>Subtotal</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Aquí se agregarán las filas de productos seleccionados -->
+                                    <!-- Las filas de productos se agregarán aquí dinámicamente -->
                                 </tbody>
                             </table>
-                            <div class="form-group">
-                                <label>Subtotal Total</label>
-                                <label id="subtotalTotal" class="form-control" readonly>0.00</label>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Total Venta</label>
+                                    <label id="totalVenta">0.00</label>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="totalVenta">Total Venta</label>
-                                <input type="hidden" class="form-control" id="totalVentaInput" name="totalVenta" value="0.00" readonly>
-                                <label id="totalVenta" class="form-control" readonly>0.00</label>
-                                <?= form_error('totalVenta') ?>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-danger" onclick="cancelarVenta()">Cancelar Venta</button>
+                            <button type="submit" class="btn btn-success">Guardar Venta</button>
                         <?= form_close() ?>
                     </div>
                 </div>
@@ -246,3 +237,12 @@
         </div>
     </div>
 </div>
+<script>
+    function cancelarVenta() {
+        // Limpiar el formulario de venta
+        document.getElementById('idCliente').value = '';
+        document.getElementById('clienteSeleccionado').innerText = 'Ninguno';
+        document.getElementById('detallesVenta').getElementsByTagName('tbody')[0].innerHTML = ''; // Limpiar productos
+        calcularTotalVenta(); // Recalcular total
+    }
+</script>

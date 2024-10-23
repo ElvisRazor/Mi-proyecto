@@ -11,6 +11,7 @@ class Dashboard extends CI_Controller {
         $this->load->model('Producto_model'); // Cargar el modelo de producto
         $this->load->model('Proveedor_model'); // Cargar el modelo de proveedor
         $this->load->model('Venta_model'); // Cargar el modelo de ventas
+        $this->load->model('Compra_model'); // Cargar el modelo de ventas
 
         if (!$this->session->userdata('login')) {
             redirect(base_url() . 'login');
@@ -69,6 +70,26 @@ class Dashboard extends CI_Controller {
         $data['incremento_semanal'] = $incremento_semanal;
         $data['incremento_mensual'] = $incremento_mensual;
         $data['ventas_hoy'] = $ventas_hoy;
+        //####################
+        // Obtener compras semanales y mensuales
+        $compras_semanales = $this->Compra_model->obtener_compras_semanales();
+        $compras_mensuales = $this->Compra_model->obtener_compras_mensuales();
+        $compras_hoy = $this->Compra_model->obtener_compras_hoy();
+
+        // Comparar ventas semanales con la semana anterior
+        $compras_semana_anterior = $this->Compra_model->obtener_compras_semana_anterior();
+        $incremento_semanal = $this->calcular_incremento($compras_semanales, $compras_semana_anterior);
+
+        // Comparar ventas mensuales con el mes anterior
+        $compras_mes_anterior = $this->Compra_model->obtener_compras_mes_anterior();
+        $incremento_mensual = $this->calcular_incremento($compras_mensuales, $compras_mes_anterior);
+
+        // Pasar los datos a la vista
+        $data['compras_semanales'] = $compras_semanales;
+        $data['compras_mensuales'] = $compras_mensuales;
+        $data['incremento_semanal'] = $incremento_semanal;
+        $data['incremento_mensual'] = $incremento_mensual;
+        $data['compras_hoy'] = $compras_hoy;
 
         // Cargar las vistas
         $this->load->view('templates/header');

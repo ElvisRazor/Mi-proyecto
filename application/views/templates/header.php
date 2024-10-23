@@ -27,7 +27,7 @@
     <!-- Custom Stylesheet -->
     <link href="<?php echo base_url(); ?>/assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>/assets/css/style.css" rel="stylesheet">
-
+    
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 

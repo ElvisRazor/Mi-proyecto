@@ -8,6 +8,7 @@ class Proveedores extends CI_Controller {
         $this->load->model('Proveedor_model');
         $this->load->helper('url');
         $this->load->library(['session', 'form_validation']);
+        require_once(APPPATH . 'libraries/tcpdf/tcpdf.php'); // Cargar TCPDF manualmente
     }
 
     public function index() {
@@ -139,5 +140,77 @@ class Proveedores extends CI_Controller {
         }
         return TRUE;
     }
+
+    public function imprimir() {
+        // Obtener todos los proveedores
+        $proveedores = $this->Proveedor_model->obtener_proveedores_activos();
+    
+        if (empty($proveedores)) {
+            $this->session->set_flashdata('error', 'No se encontraron proveedores para imprimir.');
+            redirect('proveedores');
+        }
+    
+        // Crear el PDF
+        $pdf = new TCPDF();
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->SetPrintHeader(false);
+        $pdf->AddPage();
+    
+        // Agregar imagen de marca de agua
+        $imagePath = FCPATH . 'assets/img/pisosbol2.PNG';
+        if (file_exists($imagePath)) {
+            list($width, $height) = getimagesize($imagePath);
+            $scaleFactor = 0.3;
+            $x = ($pdf->getPageWidth() - ($width * $scaleFactor)) / 2;
+            $y = ($pdf->getPageHeight() - ($height * $scaleFactor)) / 2;
+            $pdf->SetAlpha(0.3);
+            $pdf->Image($imagePath, $x, $y, $width * $scaleFactor, $height * $scaleFactor, 'PNG');
+            $pdf->SetAlpha(1);
+        } else {
+            $pdf->SetFont('helvetica', 'B', 12);
+            $pdf->Cell(0, 10, 'Error: No se pudo cargar la imagen de membretado.', 0, 1, 'C');
+        }
+    
+        // Contenido del PDF
+        $html = '
+        <h1 style="text-align:center; color:#0c4b93;">Lista de Proveedores</h1>';
+    
+        $html .= '<table border="1" cellpadding="10" style="border-collapse: collapse; width:100%;">
+                      <thead>
+                          <tr style="background-color: #0c4b93; color: white;">
+                              <th style="text-align:left;">N°</th>
+                              <th style="text-align:left;">Nombre</th>
+                              <th style="text-align:left;">Tipo Documento</th>
+                              <th style="text-align:left;">Dirección</th>
+                              <th style="text-align:left;">Correo Electrónico</th>
+                              <th style="text-align:left;">Estado</th>
+                          </tr>
+                      </thead>
+                      <tbody>';
+    
+        foreach ($proveedores as $proveedor) {
+            $html .= '<tr>
+                        <td>' . htmlspecialchars($proveedor['idProveedor']) . '</td>
+                        <td>' . htmlspecialchars($proveedor['nombre']) . '</td>
+                        <td>' . htmlspecialchars($proveedor['tipoDocumento']) . '</td>
+                        <td>' . htmlspecialchars($proveedor['direccion']) . '</td>
+                        <td>' . htmlspecialchars($proveedor['email']) . '</td>
+                        <td>' . ($proveedor['estado'] == '1' ? 'ACTIVO' : 'INACTIVO') . '</td>
+                    </tr>';
+        }
+    
+        $html .= '</tbody>
+                  </table>';
+    
+        // Agregar el contenido al PDF
+        $pdf->writeHTML($html, true, false, true, false, '');
+    
+        // Salida del PDF
+        $pdf->Output('resumen_proveedores.pdf', 'I');
+    }    
 }
 ?>

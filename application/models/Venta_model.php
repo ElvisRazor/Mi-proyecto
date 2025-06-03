@@ -16,6 +16,11 @@ class Venta_model extends CI_Model {
         return $query->row_array();
     }
 
+    // Agregar un nuevo cliente
+    public function agregar_cliente($data) {
+        return $this->db->insert('cliente', $data);
+    }
+
     public function insertarVenta($data) {
         // Asegúrate de incluir todos los campos que desees insertar en la base de datos
         $this->db->insert('venta', $data);
@@ -31,15 +36,28 @@ class Venta_model extends CI_Model {
         $this->db->select('v.*, c.nombre AS nombre_cliente, p.nombre AS nombre_producto');
         $this->db->from('venta v');
         $this->db->join('cliente c', 'v.idCliente = c.idCliente');
-        $this->db->join('detalleventa dv', 'v.idVenta = dv.idVenta');
+        $this->db->join('venta dv', 'v.idVenta = dv.idVenta');
         $this->db->join('producto p', 'dv.idProducto = p.idProducto');
+        
+        // Ordenar por fechaRegistro de manera ascendente
+        $this->db->order_by('v.fechaRegistro', 'ASC');
+        
         $query = $this->db->get();
         return $query->result_array();
     }
+    
 
-    // Obtener la venta por ID
+    // Obtener la venta por ID, incluyendo los datos adicionales del cliente
     public function obtener_venta_por_id($idVenta) {
-        $this->db->select('v.*, c.nombre AS nombre_cliente');
+        $this->db->select('
+            v.*, 
+            c.nombre AS nombre_cliente,
+            c.tipoDocumento AS tipo_documento_cliente, 
+            c.numDocumento AS num_documento_cliente,
+            c.email AS email_cliente,
+            c.telefono AS telefono_cliente,
+            c.direccion AS direccion_cliente'
+        );
         $this->db->from('venta v');
         $this->db->join('cliente c', 'v.idCliente = c.idCliente');
         $this->db->where('v.idVenta', $idVenta);
@@ -47,8 +65,14 @@ class Venta_model extends CI_Model {
         return $query->row_array();
     }
 
+    // Obtener los detalles de la venta, incluyendo código de producto y descuento unitario
     public function obtener_detalles_venta($idVenta) {
-        $this->db->select('dv.*, p.nombre AS nombre_producto');
+        $this->db->select('
+            dv.*, 
+            p.nombre AS nombre_producto, 
+            p.codigo AS codigo_producto, 
+            dv.descuento'
+        );
         $this->db->from('detalleventa dv');
         $this->db->join('producto p', 'dv.idProducto = p.idProducto');
         $this->db->where('dv.idVenta', $idVenta);
@@ -69,49 +93,96 @@ class Venta_model extends CI_Model {
         $query = $this->db->get('producto');
         return $query->row_array();
     }
-
     // Obtener cliente por ID
     public function obtenerClientePorId($idCliente) {
         $this->db->where('idCliente', $idCliente);
         $query = $this->db->get('cliente');
         return $query->row_array();
     }
-
     // Obtener todos los clientes activos
     public function obtener_clientes() {
         $this->db->where('estado', 1); // Solo clientes activos
         $query = $this->db->get('cliente');
         return $query->result_array(); // Devuelve todos los resultados como un array
     }
-    //#################3
-    // Obtener ventas de la semana actual
-    public function obtener_ventas_semanales() {
-        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 week')));
-        return $this->db->count_all_results('venta');
+    //#################
+    // Obtener las ventas totales por mes (para gráfico)
+    public function ventas_por_mes($anio) {
+        $this->db->select('MONTH(v.fechaRegistro) AS mes, SUM(dv.cantidad * dv.precioVenta) AS total_venta');
+        $this->db->from('venta v');
+        $this->db->join('detalleVenta dv', 'dv.idVenta = v.idVenta');
+        $this->db->where('YEAR(v.fechaRegistro)', $anio);
+        $this->db->group_by('MONTH(v.fechaRegistro)');
+        $this->db->order_by('MONTH(v.fechaRegistro)', 'ASC');
+        return $this->db->get()->result();
     }
-
-    // Obtener ventas del mes actual
-    public function obtener_ventas_mensuales() {
-        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 month')));
-        return $this->db->count_all_results('venta');
+    // Obtener las ventas totales (para gráfico de barras)
+    public function ventas_totales() {
+        $this->db->select('SUM(dv.cantidad * dv.precioVenta) AS total_venta');
+        $this->db->from('venta v');
+        $this->db->join('detalleVenta dv', 'dv.idVenta = v.idVenta');
+        return $this->db->get()->row();
     }
-
-    // Obtener ventas de la semana anterior
-    public function obtener_ventas_semana_anterior() {
-        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-2 weeks')));
-        $this->db->where('fechaRegistro <', date('Y-m-d H:i:s', strtotime('-1 week')));
-        return $this->db->count_all_results('venta');
+    // Obtener las ventas por categoría de producto
+    public function ventas_por_categoria() {
+        $this->db->select('p.nombre AS categoria, SUM(dv.cantidad * dv.precioVenta) AS total_venta');
+        $this->db->from('detalleVenta dv');
+        $this->db->join('producto p', 'p.idProducto = dv.idProducto');
+        $this->db->group_by('p.nombre');
+        return $this->db->get()->result();
     }
-
-    // Obtener ventas del mes anterior
-    public function obtener_ventas_mes_anterior() {
-        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-2 months')));
-        $this->db->where('fechaRegistro <', date('Y-m-d H:i:s', strtotime('-1 month')));
-        return $this->db->count_all_results('venta');
+    ########
+    public function eliminarVenta($idVenta) {
+        // Iniciar una transacción para asegurar la consistencia
+        $this->db->trans_begin();
+        
+        // Obtener los detalles de la venta para restaurar el stock
+        $this->db->select('dv.idProducto, dv.cantidad');
+        $this->db->from('detalleventa dv');
+        $this->db->where('dv.idVenta', $idVenta);
+        $detalleVenta = $this->db->get()->result_array();
+    
+        // Restaurar el stock de los productos involucrados en la venta
+        foreach ($detalleVenta as $detalle) {
+            // Obtener el producto
+            $producto = $this->obtenerProductoPorId($detalle['idProducto']);
+            
+            // Calcular el nuevo stock
+            $nuevoStock = $producto['stock'] + $detalle['cantidad'];
+            
+            // Actualizar el stock del producto
+            $this->actualizarStock($detalle['idProducto'], $nuevoStock);
+        }
+    
+        // Cambiar el estado de la venta a 0 (eliminada o cancelada)
+        $this->db->set('estado', 0);
+        $this->db->where('idVenta', $idVenta);
+        $this->db->update('venta');
+        
+        // Verificar si la transacción fue exitosa
+        if ($this->db->trans_status() === FALSE) {
+            // Si algo falló, revertir los cambios
+            $this->db->trans_rollback();
+            return FALSE;
+        } else {
+            // Si todo salió bien, confirmar la transacción
+            $this->db->trans_commit();
+            return TRUE;
+        }
     }
-    // Obtener ventas de hoy
-    public function obtener_ventas_hoy() {
-        $this->db->where('DATE(fechaRegistro)', date('Y-m-d'));
-        return $this->db->count_all_results('venta');
+    
+    public function obtener_ventas_eliminadas() {
+        $this->db->select('v.*, c.nombre AS nombre_cliente, p.nombre AS nombre_producto');
+        $this->db->from('venta v');
+        $this->db->join('cliente c', 'v.idCliente = c.idCliente');
+        $this->db->join('detalleventa dv', 'v.idVenta = dv.idVenta');
+        $this->db->join('producto p', 'dv.idProducto = p.idProducto');
+        
+        // Solo ventas eliminadas (estado 0)
+        $this->db->where('v.estado', 0);
+        
+        $this->db->order_by('v.fechaRegistro', 'ASC');
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }

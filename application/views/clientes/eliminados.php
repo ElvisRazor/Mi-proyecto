@@ -1,5 +1,17 @@
 <div class="content-body">
     <div class="container-fluid">
+        <!-- Mostrar mensaje de éxito si existe -->
+        <?php if ($this->session->flashdata('mensaje')): ?>
+            <script type="text/javascript">
+                // Mostrar el mensaje flotante con Toastr
+                toastr.success('<?php echo $this->session->flashdata('mensaje'); ?>', '¡Éxito!', {
+                    "positionClass": "toast-top-center", // Posición en la parte superior derecha
+                    "closeButton": true,               // Botón de cerrar
+                    "timeOut": 2000,                   // Tiempo en milisegundos (2 segundos)
+                    "progressBar": true,               // Barra de progreso
+                });
+            </script>
+        <?php endif; ?>
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">

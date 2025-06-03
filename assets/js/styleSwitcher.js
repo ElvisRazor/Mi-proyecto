@@ -6,31 +6,30 @@ function addSwitcher()
 	var demoPanel = '<div class="dz-demo-panel"> <div class="bg-close"></div><a class="dz-demo-trigger" data-toggle="tooltip" data-placement="right" data-original-title="Check out more demos" href="javascript:void(0)"><span><i class="las la-tint"></i></span></a> <div class="dz-demo-inner"> <a href="javascript:void(0);" class="btn btn-primary btn-sm px-2 py-1 mb-3" onclick="deleteAllCookie()">Delete All Cookie</a> <div class="dz-demo-header"> <h3 class="text-white">Select Preset Demo</h3> <a class="dz-demo-close" href="javascript:void(0)"><span><i class="las la-times"></i></span></a> </div><div class="dz-demo-content"> <div class="dz-wrapper row"> <div class="col-xl-3 col-md-6 mb-4"> <div class="overlay-bx rounded-lg dz-demo-bx"> <div class="overlay-wrapper rounded-lg"><img src="images/demo/pic1.jpg" alt="" class="w-100"></div><div class="overlay-layer"><a href="javascript:void(0);" data-theme="1" class="btn dz_theme_demo btn-secondary btn-sm mr-2">LTR</a><a href="javascript:void(0);" data-theme="1" class="btn dz_theme_demo_rtl btn-info btn-sm">RTL</a></div></div><h5 class="text-white">Demo 1</h5> </div><div class="col-xl-3 col-md-6 mb-4"> <div class="overlay-bx rounded-lg dz-demo-bx"> <div class="overlay-wrapper rounded-lg"><img src="images/demo/pic2.jpg" alt="" class="w-100"></div><div class="overlay-layer"><a href="javascript:void(0);" data-theme="2" class="btn dz_theme_demo btn-secondary btn-sm mr-2">LTR</a><a href="javascript:void(0);" data-theme="2" class="btn dz_theme_demo_rtl btn-info btn-sm">RTL</a></div></div><h5 class="text-white">Demo 2</h5> </div><div class="col-xl-3 col-md-6 mb-4"> <div class="overlay-bx rounded-lg dz-demo-bx"> <div class="overlay-wrapper rounded-lg"><img src="images/demo/pic3.jpg" alt="" class="w-100"></div><div class="overlay-layer"><a href="javascript:void(0);" data-theme="3" class="btn dz_theme_demo btn-secondary btn-sm mr-2">LTR</a><a href="javascript:void(0);" data-theme="3" class="btn dz_theme_demo_rtl btn-info btn-sm">RTL</a></div></div><h5 class="text-white">Demo 3</h5> </div><div class="col-xl-3 col-md-6 mb-4"> <div class="overlay-bx rounded-lg dz-demo-bx"> <div class="overlay-wrapper rounded-lg"><img src="images/demo/pic4.jpg" alt="" class="w-100"></div><div class="overlay-layer"><a href="javascript:void(0);" data-theme="4" class="btn dz_theme_demo btn-secondary btn-sm mr-2">LTR</a><a href="javascript:void(0);" data-theme="4" class="btn dz_theme_demo_rtl btn-info btn-sm">RTL</a></div></div><h5 class="text-white">Demo 4</h5> </div><div class="col-xl-3 col-md-6 mb-4"> <div class="overlay-bx rounded-lg dz-demo-bx"> <div class="overlay-wrapper rounded-lg"><img src="images/demo/pic5.jpg" alt="" class="w-100"></div><div class="overlay-layer"><a href="javascript:void(0);" data-theme="5" class="btn dz_theme_demo btn-secondary btn-sm mr-2">LTR</a><a href="javascript:void(0);" data-theme="5" class="btn dz_theme_demo_rtl btn-info btn-sm">RTL</a></div></div><h5 class="text-white">Demo 5</h5> </div><div class="col-xl-3 col-md-6 mb-4"> <div class="overlay-bx rounded-lg dz-demo-bx"> <div class="overlay-wrapper rounded-lg"><img src="images/demo/pic6.jpg" alt="" class="w-100"></div><div class="overlay-layer"><a href="javascript:void(0);" data-theme="6" class="btn dz_theme_demo btn-secondary btn-sm mr-2">LTR</a><a href="javascript:void(0);" data-theme="6" class="btn dz_theme_demo_rtl btn-info btn-sm">RTL</a></div></div><h5 class="text-white">Demo 6</h5> </div><div class="col-xl-3 col-md-6 mb-4"> <div class="overlay-bx rounded-lg dz-demo-bx"> <div class="overlay-wrapper rounded-lg"><img src="images/demo/pic7.jpg" alt="" class="w-100"></div><div class="overlay-layer"><a href="javascript:void(0);" data-theme="7" class="btn dz_theme_demo btn-secondary btn-sm mr-2">LTR</a><a href="javascript:void(0);" data-theme="7" class="btn dz_theme_demo_rtl btn-info btn-sm">RTL</a></div></div><h5 class="text-white">Demo 7</h5> </div><div class="col-xl-3 col-md-6 mb-4"> <div class="overlay-bx rounded-lg dz-demo-bx"> <div class="overlay-wrapper rounded-lg"><img src="images/demo/pic8.jpg" alt="" class="w-100"></div><div class="overlay-layer"><a href="javascript:void(0);" data-theme="8" class="btn dz_theme_demo btn-secondary btn-sm mr-2">LTR</a><a href="javascript:void(0);" data-theme="8" class="btn dz_theme_demo_rtl btn-info btn-sm">RTL</a></div></div><h5 class="text-white">Demo 8</h5> </div></div></div><div class="fs-14 pt-3"><span class="text-danger">*Note :</span> This theme switcher is not part of product. It is only for demo. you will get all guideline in documentation. please check <a href="javascript:void(0);" class="text-primary">documentation.</a></div></div></div>';
 	
 	if($("#dzSwitcher").length == 0) {
-		jQuery('body').append(dzSwitcher+demoPanel);
-		
-			
-		 //const ps = new PerfectScrollbar('.sidebar-right-inner');
-		 //console.log(ps.reach.x);	
-			//ps.isRtl = false;
-				
-		  $('.sidebar-right-trigger').on('click', function() {
-				$('.sidebar-right').toggleClass('show');
-		  });
-		  $('.sidebar-close-trigger,.bg-overlay').on('click', function() {
-				$('.sidebar-right').removeClass('show');
-		  });
-	}
+        jQuery('body').append(dzSwitcher + demoPanel);
+        
+        // Verifica si el tema actual es oscuro
+        const currentTheme = $('body').attr('data-theme-version');
+        if (currentTheme === 'dark') {
+            // Solo ejecutar si el tema es oscuro
+    
+            $('.sidebar-right-trigger').on('click', function() {
+                $('.sidebar-right').toggleClass('show');
+            });
+            $('.sidebar-close-trigger, .bg-overlay').on('click', function() {
+                $('.sidebar-right').removeClass('show');
+            });
+        }
+    }
 }
-
 (function($) {
-    "use strict"
-	addSwitcher();
+    "use strict";
+    addSwitcher();
 
-	
     const body = $('body');
     const html = $('html');
 
-    //get the DOM elements from right sidebar
+    // Obtiene los elementos del DOM desde la barra lateral derecha
     const typographySelect = $('#typography');
     const versionSelect = $('#theme_version');
     const layoutSelect = $('#theme_layout');
@@ -40,62 +39,59 @@ function addSwitcher()
     const containerLayoutSelect = $('#container_layout');
     const themeDirectionSelect = $('#theme_direction');
 
-    //change the theme typography controller
+    // Cambiar la tipografía del tema
     typographySelect.on('change', function() {
         body.attr('data-typography', this.value);
-		
-		setCookie('typography', this.value);
+        setCookie('typography', this.value);
     });
 
-    //change the theme version controller
+    // Cambiar la versión del tema (oscuro o claro)
     versionSelect.on('change', function() {
-		body.attr('data-theme-version', this.value);
-		
-		if(this.value === 'dark'){
-			jQuery(".nav-header .logo-abbr").attr("src", "./images/logo.png");
-			jQuery(".nav-header .logo-compact").attr("src", "images/logo-text.png");
-			jQuery(".nav-header .brand-title").attr("src", "images/logo-text.png");
-			
-			setCookie('logo_src', './images/logo.png');
-			setCookie('logo_src2', 'images/logo-text.png');
-		}else{
-			jQuery(".nav-header .logo-abbr").attr("src", "./images/logo-white.png");
-			jQuery(".nav-header .logo-compact").attr("src", "images/logo-text-white.png");
-			jQuery(".nav-header .brand-title").attr("src", "images/logo-text-white.png");
-			
-			setCookie('logo_src', './images/logo-white.png');
-			setCookie('logo_src2', 'images/logo-text-white.png');
-		}
-		
-		setCookie('version', this.value);
-    });
-	
-	
+        body.attr('data-theme-version', this.value);
 
-    //change the sidebar position controller
+        if(this.value === 'dark') {
+            jQuery(".nav-header .logo-abbr").attr("src", "./images/logo.png");
+            jQuery(".nav-header .logo-compact").attr("src", "images/logo-text.png");
+            jQuery(".nav-header .brand-title").attr("src", "images/logo-text.png");
+
+            setCookie('logo_src', './images/logo.png');
+            setCookie('logo_src2', 'images/logo-text.png');
+        } else {
+            jQuery(".nav-header .logo-abbr").attr("src", "./images/logo-white.png");
+            jQuery(".nav-header .logo-compact").attr("src", "images/logo-text-white.png");
+            jQuery(".nav-header .brand-title").attr("src", "images/logo-text-white.png");
+
+            setCookie('logo_src', './images/logo-white.png');
+            setCookie('logo_src2', 'images/logo-text-white.png');
+        }
+
+        setCookie('version', this.value);
+    });
+
+    // Cambiar la posición de la barra lateral
     sidebarPositionSelect.on('change', function() {
-        this.value === "fixed" && body.attr('data-sidebar-style') === "modern" && body.attr('data-layout') === "vertical" ? 
-        alert("Sorry, Modern sidebar layout dosen't support fixed position!") :
+        this.value === "fixed" && body.attr('data-sidebar-style') === "modern" && body.attr('data-layout') === "vertical" ?
+        alert("Sorry, Modern sidebar layout doesn't support fixed position!") :
         body.attr('data-sidebar-position', this.value);
-		setCookie('sidebarPosition', this.value);
+        setCookie('sidebarPosition', this.value);
     });
 
-    //change the header position controller
+    // Cambiar la posición del encabezado
     headerPositionSelect.on('change', function() {
         body.attr('data-header-position', this.value);
-		setCookie('headerPosition', this.value);
+        setCookie('headerPosition', this.value);
     });
 
-    //change the theme direction (rtl, ltr) controller
+    // Cambiar la dirección del tema (rtl, ltr)
     themeDirectionSelect.on('change', function() {
         html.attr('dir', this.value);
         html.attr('class', '');
         html.addClass(this.value);
         body.attr('direction', this.value);
-		setCookie('direction', this.value);
+        setCookie('direction', this.value);
     });
 
-    //change the theme layout controller
+    // Cambiar el diseño del tema
     layoutSelect.on('change', function() {
         if(body.attr('data-sidebar-style') === 'overlay') {
             body.attr('data-sidebar-style', 'full');
@@ -104,32 +100,29 @@ function addSwitcher()
         }
 
         body.attr('data-layout', this.value);
-		setCookie('layout', this.value);
+        setCookie('layout', this.value);
     });
-    
-    //change the container layout controller
+
+    // Cambiar el diseño del contenedor
     containerLayoutSelect.on('change', function() {
         if(this.value === "boxed") {
-
             if(body.attr('data-layout') === "vertical" && body.attr('data-sidebar-style') === "full") {
                 body.attr('data-sidebar-style', 'overlay');
                 body.attr('data-container', this.value);
-                
+
                 setTimeout(function(){
                     $(window).trigger('resize');
-                },200);
-                
+                }, 200);
+
                 return;
             }
-            
-            
         }
 
         body.attr('data-container', this.value);
-		setCookie('containerLayout', this.value);
+        setCookie('containerLayout', this.value);
     });
 
-    //change the sidebar style controller
+    // Cambiar el estilo de la barra lateral
     sidebarStyleSelect.on('change', function() {
         if(body.attr('data-layout') === "horizontal") {
             if(this.value === "overlay") {
@@ -152,64 +145,39 @@ function addSwitcher()
 
         body.attr('data-sidebar-style', this.value);
 
-         if(body.attr('data-sidebar-style') === 'icon-hover') {
+        if(body.attr('data-sidebar-style') === 'icon-hover') {
             $('.deznav').on('hover',function() {
-			$('#main-wrapper').addClass('iconhover-toggle'); 
+                $('#main-wrapper').addClass('iconhover-toggle');
             }, function() {
-			$('#main-wrapper').removeClass('iconhover-toggle'); 
+                $('#main-wrapper').removeClass('iconhover-toggle');
             });
-        } 
-		
-		setCookie('sidebarStyle', this.value);
-	});
+        }
 
-    
-	
-	jQuery("#nav_header_color_1").on('click',function(){
-		jQuery(".nav-header .logo-abbr").attr("src", "./images/logo.png");
-		setCookie('logo_src', './images/logo.png');
-		return false;
-    });
-    
-	jQuery("#nav_header_color_2, #nav_header_color_3, #nav_header_color_4, #nav_header_color_5, #nav_header_color_6, #nav_header_color_7, #nav_header_color_8, #nav_header_color_9, #nav_header_color_10, #nav_header_color_11, #nav_header_color_12, #nav_header_color_13, #nav_header_color_14, #nav_header_color_15").on('click',function(){
-		jQuery(".nav-header .logo-abbr").attr("src", "./images/logo-white.png");
-		setCookie('logo_src', './images/logo-white.png');
-		return false;
-    });
-   
-    jQuery("#nav_header_color_3").on('click',function(){
-		jQuery(".nav-header .logo-abbr").attr("src", "./images/logo-white.png");
-		setCookie('logo_src', './images/logo-white.png');
-		return false;
+        setCookie('sidebarStyle', this.value);
     });
 
-	
-	//change the nav-header background controller
+    // Cambiar el fondo del encabezado de navegación
     $('input[name="navigation_header"]').on('click', function() {
-		body.attr('data-nav-headerbg', this.value);
-		setCookie('navheaderBg', this.value);
+        body.attr('data-nav-headerbg', this.value);
+        setCookie('navheaderBg', this.value);
     });
-	
-    //change the header background controller
+
+    // Cambiar el fondo del encabezado
     $('input[name="header_bg"]').on('click', function() {
         body.attr('data-headerbg', this.value);
-		setCookie('headerBg', this.value);
+        setCookie('headerBg', this.value);
     });
 
-    //change the sidebar background controller
+    // Cambiar el fondo de la barra lateral
     $('input[name="sidebar_bg"]').on('click', function() {
         body.attr('data-sibebarbg', this.value);
-		setCookie('sidebarBg', this.value);
+        setCookie('sidebarBg', this.value);
     });
-	
-	//change the primary color controller
+
+    // Cambiar el color primario
     $('input[name="primary_bg"]').on('click', function() {
         body.attr('data-primary', this.value);
-		setCookie('primary', this.value);
+        setCookie('primary', this.value);
     });
-	
-	
 
 })(jQuery);
-
-

@@ -1,5 +1,26 @@
 <div class="content-body">
     <div class="container-fluid">
+    <?php if ($this->session->flashdata('success')): ?>
+    <script>
+        toastr.success('<?= $this->session->flashdata('success'); ?>', 'Éxito', {
+            "positionClass": "toast-top-center",  // Mostrar en el centro
+            "closeButton": true,
+            "timeOut": 5000,  // Desaparece después de 5 segundos
+            "progressBar": true
+        });
+    </script>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('error')): ?>
+    <script>
+        toastr.error('<?= $this->session->flashdata('error'); ?>', 'Error', {
+            "positionClass": "toast-top-center",  // Mostrar en el centro
+            "closeButton": true,
+            "timeOut": 5000,  // Desaparece después de 5 segundos
+            "progressBar": true
+        });
+    </script>
+<?php endif; ?>
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
@@ -10,7 +31,6 @@
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<?= site_url('compras/agregar') ?>">Realizar Nueva Compra</a></li>
-                    <li class="breadcrumb-item"><a href="<?= site_url('compras/consulta') ?>">Realizar Consulta</a></li>
                 </ol>
             </div>
         </div>
@@ -28,6 +48,7 @@
                             <table id="example3" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
+                                        <th><strong>N°</strong></th>
                                         <th><strong>Proveedor</strong></th>
                                         <th><strong>Producto</strong></th>
                                         <th><strong>Número Comprobante</strong></th>
@@ -39,10 +60,11 @@
                                 <tbody>
                                     <?php foreach ($compra as $item): ?>
                                         <tr>
+                                            <td><?= htmlspecialchars($item['idCompra_compra']) ?></td>
                                             <td><?= htmlspecialchars($item['nombre_proveedor']) ?></td>
                                             <td><?= htmlspecialchars($item['nombre_producto']) ?></td>
                                             <td><?= htmlspecialchars($item['numComprobante']) ?></td>
-                                            <td><?= htmlspecialchars($item['totalCompra']) ?></td>
+                                            <td>Bs.<?= htmlspecialchars($item['totalCompra']) ?></td>
                                             <td>
                                                 <?= ($item['estado'] == 1) ? 'Activo' : 'Inactivo' ?>
                                             </td>
@@ -50,8 +72,8 @@
                                                 <a href="<?= site_url('compras/imprimir/'.$item['idCompra']) ?>" class="btn btn-primary btn-sm" target="_blank">
                                                     <i class="fa fa-print"></i> Imprimir
                                                 </a>
-                                                <!--<a href="<?= site_url('compras/editar/'.$item['idCompra']) ?>" class="btn btn-info btn-sm">Editar</a>
-                                                <a href="<?= site_url('compras/eliminar/'.$item['idCompra']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta Compra?');">Eliminar</a>-->
+                                                <a href="<?= site_url('compras/editar/'.$item['idCompra']) ?>" class="btn btn-info btn-sm">Editar</a>
+                                                <!--<a href="<?= site_url('compras/eliminar/'.$item['idCompra']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar esta Compra?');">Eliminar</a>-->
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -64,3 +86,22 @@
         </div>
     </div>
 </div>
+<style>
+/* Aumentar el tamaño de los mensajes de Toastr */
+.toast {
+    font-size: 20px !important;  /* Aumentar el tamaño de la fuente */
+    padding: 35px !important;    /* Aumentar el espacio alrededor del texto */
+    width: 350px !important;     /* Aumentar el ancho horizontal del mensaje */
+    max-width: 70% !important;  /* Asegurar que el ancho no supere el contenedor */
+}
+
+/* Aumentar el tamaño del título */
+.toast-title {
+    font-size: 20px !important;  /* Título más grande */
+}
+
+/* Aumentar el tamaño del mensaje */
+.toast-message {
+    font-size: 20px !important;  /* Mensaje más grande */
+}
+</style>

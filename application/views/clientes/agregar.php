@@ -1,5 +1,16 @@
 <div class="content-body">
     <div class="container-fluid">
+        <!-- Mostrar mensaje de éxito si existe -->
+<?php if ($this->session->flashdata('error')): ?>
+    <script>
+        toastr.error('<?= $this->session->flashdata('error'); ?>', 'Error', {
+            "positionClass": "toast-top-center",  // Mostrar en el centro
+            "closeButton": true,
+            "timeOut": 5000,  // Desaparece después de 5 segundos
+            "progressBar": true
+        });
+    </script>
+<?php endif; ?>
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
@@ -17,15 +28,15 @@
         <div class="row">
             <div class="col-xl-12 col-lg-12">
                 <div class="card">
-                    <?php if ($this->session->flashdata('mensaje')): ?>
-                            <div class="alert alert-success">
-                                <?php echo $this->session->flashdata('mensaje'); ?>
-                            </div>
-                        <?php elseif ($this->session->flashdata('error')): ?>
-                            <div class="alert alert-danger">
-                                <?php echo $this->session->flashdata('error'); ?>
-                            </div>
-                        <?php endif; ?>
+                <?php if ($this->session->flashdata('mensaje')): ?>
+                        <div class="alert alert-success">
+                            <?php echo $this->session->flashdata('mensaje'); ?>
+                        </div>
+                    <?php elseif ($this->session->flashdata('error')): ?>
+                        <div class="alert alert-danger">
+                            <?php echo $this->session->flashdata('error'); ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="card-body">
                         <form action="<?= site_url('clientes/agregar') ?>" method="post">
                             <div class="row">
@@ -46,6 +57,8 @@
                                         <label for="nombre" class="form-label">Nombre</label>
                                         <input type="text" name="nombre" class="form-control" id="nombre" required>
                                     </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
                                         <label for="direccion" class="form-label">Dirección</label>
                                         <input type="text" name="direccion" class="form-control" id="direccion" required>
@@ -56,7 +69,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="email" class="form-label">Correo Electrónico</label>
-                                        <input type="email" name="email" class="form-control" id="email" required>
+                                        <input type="email" name="email" class="form-control" id="email">
                                     </div>
                                 </div>
                             </div>

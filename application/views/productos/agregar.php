@@ -1,5 +1,27 @@
 <div class="content-body">
     <div class="container-fluid">
+        <?php if ($this->session->flashdata('mensaje')): ?>
+            <script>
+                toastr.success('<?= $this->session->flashdata('mensaje'); ?>', 'Éxito', {
+                    "positionClass": "toast-top-center",
+                    "closeButton": true,
+                    "timeOut": 5000,
+                    "progressBar": true
+                });
+            </script>
+        <?php endif; ?>
+
+        <?php if ($this->session->flashdata('error')): ?>
+            <script>
+                toastr.error('<?= $this->session->flashdata('error'); ?>', 'Error', {
+                    "positionClass": "toast-top-center",
+                    "closeButton": true,
+                    "timeOut": 5000,
+                    "progressBar": true
+                });
+            </script>
+        <?php endif; ?>
+
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
@@ -17,6 +39,15 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+                    <?php if ($this->session->flashdata('mensaje')): ?>
+                        <div class="alert alert-success">
+                            <?php echo $this->session->flashdata('mensaje'); ?>
+                        </div>
+                    <?php elseif ($this->session->flashdata('error')): ?>
+                        <div class="alert alert-danger">
+                            <?php echo $this->session->flashdata('error'); ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="card-header">
                         <h4 class="card-title">Formulario de Producto</h4>
                     </div>
@@ -36,21 +67,28 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <label for="codigo">Precio</label>
-                                <input type="text" class="form-control" id="precio" name="precio" value="<?= set_value('precio') ?>" required>
-                                <?= form_error('precio') ?>
+                                <label for="precioCompra">Precio Compra</label>
+                                <input type="text" class="form-control" id="precioCompra" name="precioCompra" value="<?= set_value('precioCompra') ?>" required>
+                                <?= form_error('precioCompra') ?>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="precioVenta">Precio Venta</label>
+                                <input type="text" class="form-control" id="precioVenta" name="precioVenta" value="<?= set_value('precioVenta') ?>" required>
+                                <?= form_error('precioVenta') ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="descripcion">Descripción</label>
+                                <textarea class="form-control" id="descripcion" name="descripcion"><?= set_value('descripcion') ?></textarea>
+                                <?= form_error('descripcion') ?>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="stock">Stock</label>
-                                <input type="number" class="form-control" id="stock" name="stock" value="<?= set_value('stock') ?>" required>
+                                <input type="number" class="form-control" id="stock" name="stock" value="0" readonly>
                                 <?= form_error('stock') ?>
                             </div>
                         </div>
-                            <div class="form-group">
-                                <label for="descripcion">Descripción</label>
-                                <textarea class="form-control" id="descripcion" name="descripcion" ><?= set_value('descripcion') ?></textarea>
-                                <?= form_error('descripcion') ?>
-                            </div>
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label for="idCategoria">Categoría</label>
@@ -67,7 +105,7 @@
                                 <?= form_error('imagen') ?>
                             </div>
                         </div>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
                         <?= form_close() ?>
                     </div>
                 </div>
@@ -75,3 +113,20 @@
         </div>
     </div>
 </div>
+<style>
+/* Personalización de Toastr */
+.toast {
+    font-size: 20px !important;
+    padding: 35px !important;
+    width: 350px !important;
+    max-width: 70% !important;
+}
+
+.toast-title {
+    font-size: 20px !important;
+}
+
+.toast-message {
+    font-size: 20px !important;
+}
+</style>

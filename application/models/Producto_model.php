@@ -11,9 +11,21 @@ class Producto_model extends CI_Model {
         return $this->db->get_where('producto', ['idProducto' => $idProducto])->row_array();
     }
 
+    // Método para actualizar el stock del producto
     public function actualizarStock($idProducto, $nuevoStock) {
+        if ($nuevoStock < 0) {
+            throw new Exception("El stock no puede ser negativo.");
+        }
+
+        $data = ['stock' => $nuevoStock];
+
+        // Si el stock es 0, se marca el producto como inactivo
+        if ($nuevoStock == 0) {
+            $data['estado'] = 0; // Producto inactivo
+        }
+
         $this->db->where('idProducto', $idProducto);
-        $this->db->update('producto', ['stock' => $nuevoStock]);
+        return $this->db->update('producto', $data);
     }
 
     // Obtener productos activos
@@ -23,8 +35,19 @@ class Producto_model extends CI_Model {
         return $query->result_array(); // Devuelve todos los resultados como un array
     }
 
+    // Obtener productos eliminados (inactivos)
+    public function obtener_productos_eliminados() {
+        $this->db->where('estado', 0); // Solo clproductosientes inactivos
+        $query = $this->db->get('producto');
+        return $query->result_array(); // Devuelve todos los resultados como un array
+    }
+
     // Agregar un nuevo producto
     public function agregar_producto($data) {
+        if ($data['stock'] != 0) {
+            throw new Exception("El producto solo puede crearse con un stock inicial de 0.");
+        }
+        $data['estado'] = 1; // Por defecto, el producto es activo
         return $this->db->insert('producto', $data);
     }
 
@@ -48,9 +71,10 @@ class Producto_model extends CI_Model {
     }
 
     // Obtener categorías (asumiendo que existe una tabla categorías)
-    public function obtener_categorias() {
+    public function obtener_categorias_activos() {
+        $this->db->where('estado', 1); // Solo categorías activas
         $query = $this->db->get('categoria');
-        return $query->result_array();
+        return $query->result_array(); // Devuelve todos los resultados como un array
     }
     // Método para obtener los productos que tienen stock disponible
     public function obtener_productos_con_stock() {
@@ -73,6 +97,11 @@ class Producto_model extends CI_Model {
         } else {
             return 0;
         }
+    }
+    // Habilitar un usuario (cambiar el estado a activo)
+    public function habilitar_producto($idProducto) {
+        $this->db->where('idProducto', $idProducto);
+        return $this->db->update('producto', ['estado' => 1]);
     }
 }
 ?>

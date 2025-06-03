@@ -1,5 +1,26 @@
 <div class="content-body">
     <div class="container-fluid">
+    <?php if ($this->session->flashdata('mensaje')): ?>
+    <script>
+        toastr.success('<?= $this->session->flashdata('mensaje'); ?>', 'Éxito', {
+            "positionClass": "toast-top-center",  // Mostrar en el centro
+            "closeButton": true,
+            "timeOut": 5000,  // Desaparece después de 5 segundos
+            "progressBar": true
+        });
+    </script>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('error')): ?>
+    <script>
+        toastr.error('<?= $this->session->flashdata('error'); ?>', 'Error', {
+            "positionClass": "toast-top-center",  // Mostrar en el centro
+            "closeButton": true,
+            "timeOut": 5000,  // Desaparece después de 5 segundos
+            "progressBar": true
+        });
+    </script>
+<?php endif; ?>
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
@@ -30,12 +51,14 @@
                             <table id="example3" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
-                                        <th><strong>Nombre Completo</strong></th>
+                                        <th><strong>Nombre</strong></th>
+                                        <th><strong>Apellido Paterno</strong></th>
+                                        <th><strong>Apellido Materno</strong></th>
                                         <th><strong>Correo Electrónico</strong></th>
                                         <th><strong>Tipo Documento</strong></th>
                                         <th><strong>Dirección</strong></th>
                                         <th><strong>Rol</strong></th>
-                                        <th><strong>Estado</strong></th> <!-- Columna para mostrar el badge -->
+                                        <th><strong>Estado</strong></th>
                                         <th><strong>Acciones</strong></th>
                                     </tr>
                                 </thead>
@@ -43,6 +66,8 @@
                                     <?php foreach ($usuario as $usuario): ?>
                                         <tr>
                                             <td><?= $usuario['nombre'] ?></td>
+                                            <td><?= $usuario['primerApellido'] ?></td>
+                                            <td><?= $usuario['segundoApellido'] ?></td>
                                             <td><?= $usuario['email'] ?></td>
                                             <td>
                                                 <?php if ($usuario['tipoDocumento'] == 'Ci/Nit'): ?>
@@ -106,3 +131,22 @@
         </div>
     </div>
 </div>
+<style>
+/* Aumentar el tamaño de los mensajes de Toastr */
+.toast {
+    font-size: 20px !important;  /* Aumentar el tamaño de la fuente */
+    padding: 35px !important;    /* Aumentar el espacio alrededor del texto */
+    width: 350px !important;     /* Aumentar el ancho horizontal del mensaje */
+    max-width: 70% !important;  /* Asegurar que el ancho no supere el contenedor */
+}
+
+/* Aumentar el tamaño del título */
+.toast-title {
+    font-size: 20px !important;  /* Título más grande */
+}
+
+/* Aumentar el tamaño del mensaje */
+.toast-message {
+    font-size: 20px !important;  /* Mensaje más grande */
+}
+</style>

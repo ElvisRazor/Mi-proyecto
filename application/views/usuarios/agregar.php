@@ -1,6 +1,27 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-body">
     <div class="container-fluid">
+    <?php if ($this->session->flashdata('mensaje')): ?>
+    <script>
+        toastr.success('<?= $this->session->flashdata('mensaje'); ?>', 'Éxito', {
+            "positionClass": "toast-top-center",  // Mostrar en el centro
+            "closeButton": true,
+            "timeOut": 5000,  // Desaparece después de 5 segundos
+            "progressBar": true
+        });
+    </script>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('error')): ?>
+    <script>
+        toastr.error('<?= $this->session->flashdata('error'); ?>', 'Error', {
+            "positionClass": "toast-top-center",  // Mostrar en el centro
+            "closeButton": true,
+            "timeOut": 5000,  // Desaparece después de 5 segundos
+            "progressBar": true
+        });
+    </script>
+<?php endif; ?>
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
@@ -33,10 +54,18 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
-                                        <label for="nombre" class="form-label">Nombre Completo</label>
+                                        <label for="nombre" class="form-label">Nombre</label>
                                         <input type="text" class="form-control" id="nombre" name="nombre" value="<?= set_value('nombre') ?>" required>
                                     </div>
                                     <div class="form-group">
+                                        <label for="primerApellido" class="form-label">Apellido Paterno</label>
+                                        <input type="text" class="form-control" id="primerApellido" name="primerApellido" value="<?= set_value('primerApellido') ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="segundoApellido" class="form-label">Apellido Materno</label>
+                                        <input type="text" class="form-control" id="segundoApellido" name="segundoApellido" value="<?= set_value('segundoApellido') ?>">
+                                    </div>
+                                    <div class="form-group ">
                                         <label for="email" class="form-label">Correo Electrónico</label>
                                         <input type="email" class="form-control" id="email" name="email" value="<?= set_value('email') ?>" required>
                                     </div>
@@ -52,6 +81,8 @@
                                         <label for="numDocumento" class="form-label">Nro. Documento</label>
                                         <input type="text" class="form-control" id="numDocumento" name="numDocumento" value="<?= set_value('numDocumento') ?>" required>
                                     </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
                                         <label for="direccion" class="form-label">Dirección</label>
                                         <input type="text" class="form-control" id="direccion" name="direccion" value="<?= set_value('direccion') ?>" required>
@@ -82,5 +113,22 @@
         </div>
     </div>
 </div>
+<style>
+/* Aumentar el tamaño de los mensajes de Toastr */
+.toast {
+    font-size: 20px !important;  /* Aumentar el tamaño de la fuente */
+    padding: 35px !important;    /* Aumentar el espacio alrededor del texto */
+    width: 350px !important;     /* Aumentar el ancho horizontal del mensaje */
+    max-width: 70% !important;  /* Asegurar que el ancho no supere el contenedor */
+}
 
+/* Aumentar el tamaño del título */
+.toast-title {
+    font-size: 20px !important;  /* Título más grande */
+}
 
+/* Aumentar el tamaño del mensaje */
+.toast-message {
+    font-size: 20px !important;  /* Mensaje más grande */
+}
+</style>

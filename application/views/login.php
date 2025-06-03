@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-    <style>
+<style>
     body {
         margin: 0;
         padding: 0;
@@ -19,7 +19,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: url('assets/img/pisosbol(1).PNG') no-repeat center center fixed;
+        background: url('assets/img/dukel.PNG') no-repeat center center fixed;
         background-size: cover;
     }
 
@@ -27,13 +27,13 @@
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.3); /* Fondo semitransparente */
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        padding: 40px;
+        padding: 30px;
         width: 450px;
     }
 
     .login-logo img {
-        width: 120px;
-        margin-bottom: 15px;
+        width: 100px;
+        margin-bottom: 0px;
     }
     .card {
         border-radius: 8px;
@@ -46,20 +46,20 @@
     }
 
     .btn-primary {
-        background-color: #4caf50;
-        border-color: #4caf50;
+        background-color:rgb(56, 73, 170);
+        border-color:rgb(57, 124, 141);
         transition: background-color 0.3s ease-in-out;
         border-radius: 4px;
         padding: 10px;
     }
 
     .btn-primary:hover {
-        background-color: #388e3c;
-        border-color: #388e3c;
+        background-color:rgb(60, 135, 185);
+        border-color:rgb(56, 154, 179);
     }
 
     .input-group-text {
-        background-color: #66bb6a;
+        background-color:rgb(65, 120, 172);
         color: #ffffff;
     }
 
@@ -87,17 +87,16 @@
     }
 
     input[type="text"]:focus, input[type="password"]:focus {
-        border-color: #4caf50;
+        border-color:rgb(59, 153, 148);
     }
 </style>
-
 
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo text-center">
-            <img src="<?= base_url('assets/img/pisosbol1.PNG') ?>" alt="Logo" class="img-fluid">
-        </div>
+        <img src="<?= base_url('assets/img/logoTrans.PNG') ?>" alt="Logo" class="img-fluid" style="width: 100%; max-width: 500px;">
+    </div>
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg text-center"><b>Inicia sesión</b></p>

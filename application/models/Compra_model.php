@@ -29,18 +29,20 @@ class Compra_model extends CI_Model {
 
     // Obtener todas las compras activas
     public function obtener_compras() {
-        $this->db->select('c.*, p.nombre AS nombre_proveedor, pr.nombre AS nombre_producto');
+        $this->db->select('c.*, p.nombre AS nombre_proveedor, pr.nombre AS nombre_producto, c.idCompra AS idCompra_compra');
         $this->db->from('compra c');
         $this->db->join('proveedor p', 'c.idProveedor = p.idProveedor');
-        $this->db->join('detallecompra dc', 'c.idCompra = dc.idCompra');
+        $this->db->join('detallecompra dc', 'dc.idCompra = c.idCompra');
         $this->db->join('producto pr', 'dc.idProducto = pr.idProducto');
+        // Ordenar por fechaRegistro de manera ascendente
+        $this->db->order_by('c.fechaRegistro', 'ASC');
         $query = $this->db->get();
         return $query->result_array();
     }
 
     // Obtener una compra por ID
     public function obtener_compra_por_id($idCompra) {
-        $this->db->select('c.*, p.nombre AS nombre_proveedor');
+        $this->db->select('c.*, p.nombre AS nombre_proveedor, p.email AS email_proveedor, p.telefono AS telefono_proveedor, p.direccion AS direccion_proveedor');
         $this->db->from('compra c');
         $this->db->join('proveedor p', 'c.idProveedor = p.idProveedor');
         $this->db->where('c.idCompra', $idCompra);
@@ -49,15 +51,23 @@ class Compra_model extends CI_Model {
     }
 
     // Obtener los detalles de una compra por ID
-    public function obtener_detalles_compra($idCompra) {
-        $this->db->select('dc.*, pr.nombre AS nombre_producto');
+    public function obtener_detalles_compra($idCompra, $idProducto = null) {
+        $this->db->select('dc.*, pr.nombre AS nombre_producto, pr.codigo AS codigo_producto');
         $this->db->from('detallecompra dc');
         $this->db->join('producto pr', 'dc.idProducto = pr.idProducto');
         $this->db->where('dc.idCompra', $idCompra);
+        
+        // Filtro opcional por idProducto si se proporciona
+        if ($idProducto !== null) {
+            $this->db->where('dc.idProducto', $idProducto);
+        }
+    
         $query = $this->db->get();
-        return $query->result_array();
-    }
-
+        
+        // Devolver un solo detalle si se especifica idProducto, o todos si no se especifica
+        return ($idProducto !== null) ? $query->row_array() : $query->result_array();
+    }    
+    
     // Actualizar el stock del producto
     public function actualizarStock($idProducto, $nuevoStock) {
         $this->db->set('stock', $nuevoStock);
@@ -67,6 +77,7 @@ class Compra_model extends CI_Model {
 
     // Obtener producto por ID
     public function obtenerProductoPorId($idProducto) {
+        $this->db->select('idProducto, nombre, precioCompra, stock');
         $this->db->where('idProducto', $idProducto);
         $query = $this->db->get('producto');
         return $query->row_array();
@@ -86,41 +97,26 @@ class Compra_model extends CI_Model {
         return $query->result_array(); // Devuelve todos los resultados como un array
     }
 
+    // #############
+    public function actualizarCompra($idCompra, $data) {
+        $this->db->where('idCompra', $idCompra);
+        $this->db->update('compra', $data);
+    }
+
+    public function actualizarDetalleCompra($idCompra, $idProducto, $data) {
+        $this->db->where('idCompra', $idCompra);
+        $this->db->where('idProducto', $idProducto);
+        $this->db->update('detallecompra', $data);
+    }
+
+    public function eliminarDetalleCompra($idCompra, $idProducto) {
+        $this->db->where('idCompra', $idCompra);
+        $this->db->where('idProducto', $idProducto);
+        $this->db->delete('detallecompra');
+    }
     // #################
-    // Obtener compras de la semana actual
-    public function obtener_compras_semanales() {
-        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 week')));
-        return $this->db->count_all_results('compra');
-    }
-
-    // Obtener compras del mes actual
-    public function obtener_compras_mensuales() {
-        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-1 month')));
-        return $this->db->count_all_results('compra');
-    }
-
-    // Obtener compras de la semana anterior
-    public function obtener_compras_semana_anterior() {
-        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-2 weeks')));
-        $this->db->where('fechaRegistro <', date('Y-m-d H:i:s', strtotime('-1 week')));
-        return $this->db->count_all_results('compra');
-    }
-
-    // Obtener compras del mes anterior
-    public function obtener_compras_mes_anterior() {
-        $this->db->where('fechaRegistro >=', date('Y-m-d H:i:s', strtotime('-2 months')));
-        $this->db->where('fechaRegistro <', date('Y-m-d H:i:s', strtotime('-1 month')));
-        return $this->db->count_all_results('compra');
-    }
-
-    // Obtener compras de hoy
-    public function obtener_compras_hoy() {
-        $this->db->where('DATE(fechaRegistro)', date('Y-m-d'));
-        return $this->db->count_all_results('compra');
-    }
-
     public function obtener_compras_por_fechas($fechaInicio = null, $fechaFin = null) {
-        $this->db->select('c.idCompra, c.fechaRegistro, p.nombre AS proveedor, SUM(dc.cantidad) AS cantidad_productos, SUM(dc.cantidad * dc.precio) AS total_compra');
+        $this->db->select('c.idCompra, c.fechaRegistro, p.nombre AS proveedor, SUM(dc.cantidad) AS cantidad_productos, SUM(dc.cantidad * dc.precioCompra) AS total_compra');
         $this->db->from('compra c');
         $this->db->join('detalleCompra dc', 'dc.idCompra = c.idCompra');
         $this->db->join('proveedor p', 'p.idProveedor = c.idProveedor');
@@ -135,5 +131,5 @@ class Compra_model extends CI_Model {
         $this->db->order_by('c.fechaRegistro', 'ASC');
     
         return $this->db->get()->result_array();
-    }                  
+    }
 }

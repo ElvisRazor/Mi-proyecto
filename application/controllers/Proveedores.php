@@ -25,7 +25,8 @@ class Proveedores extends CI_Controller {
             $this->form_validation->set_rules('nombre', 'Nombre Completo', 'required|regex_match[/^[a-zA-Z\s]+$/]', [
                 'regex_match' => 'El nombre completo solo puede contener letras y espacios.'
             ]);
-            $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|callback_check_email');
+            // CAMBIO AQUÍ: 'permit_empty' permite que el campo esté vacío
+            $this->form_validation->set_rules('email', 'Correo Electrónico', 'permit_empty|valid_email|callback_check_email'); 
             $this->form_validation->set_rules('tipoDocumento', 'Tipo de Documento', 'required');
             $this->form_validation->set_rules('numDocumento', 'Número de Documento', 'required|regex_match[/^[a-zA-Z0-9-]+$/]', [
                 'regex_match' => 'El número de documento solo puede contener letras, números y guiones.'
@@ -38,7 +39,8 @@ class Proveedores extends CI_Controller {
             if ($this->form_validation->run() === TRUE) {
                 $data = [
                     'nombre' => $this->input->post('nombre'),
-                    'email' => $this->input->post('email'),
+                    // Asegúrate de que, si el email está vacío, se guarde como NULL o una cadena vacía en la base de datos
+                    'email' => $this->input->post('email') ? $this->input->post('email') : null, 
                     'tipoDocumento' => $this->input->post('tipoDocumento'),
                     'numDocumento' => $this->input->post('numDocumento'),
                     'direccion' => $this->input->post('direccion'),
@@ -70,7 +72,7 @@ class Proveedores extends CI_Controller {
             $this->form_validation->set_rules('nombre', 'Nombre Completo', 'required|regex_match[/^[a-zA-Z\s]+$/]', [
                 'regex_match' => 'El nombre completo solo puede contener letras y espacios.'
             ]);
-            $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email');
+            $this->form_validation->set_rules('email', 'Correo Electrónico', 'valid_email|callback_check_email'); 
             $this->form_validation->set_rules('tipoDocumento', 'Tipo de Documento', 'required');
             $this->form_validation->set_rules('numDocumento', 'Número de Documento', 'required|regex_match[/^[a-zA-Z0-9-]+$/]', [
                 'regex_match' => 'El número de documento solo puede contener letras, números y guiones.'
@@ -83,7 +85,7 @@ class Proveedores extends CI_Controller {
             if ($this->form_validation->run() === TRUE) {
                 $data = [
                     'nombre' => $this->input->post('nombre'),
-                    'email' => $this->input->post('email'),
+                    'email' => $this->input->post('email') ? $this->input->post('email') : null, 
                     'tipoDocumento' => $this->input->post('tipoDocumento'),
                     'numDocumento' => $this->input->post('numDocumento'),
                     'direccion' => $this->input->post('direccion'),
@@ -119,6 +121,17 @@ class Proveedores extends CI_Controller {
     }
 
     public function eliminados() {
+        // Obtener el rol del usuario desde la sesión
+        $rol = $this->session->userdata('rol');
+    
+        // Verificar si el rol es "Administrador"
+        if ($rol != 'administrador') {
+            // Si no es administrador, redirigir a otra página o mostrar mensaje de error
+            $this->session->set_flashdata('mensaje', 'No tienes acceso a esta vista');
+            redirect('proveedores'); // Cambia 'dashboard' por la ruta que desees
+        }
+    
+        // Si es administrador, cargar la vista de proveedores eliminados
         $data['proveedor'] = $this->Proveedor_model->obtener_proveedores_eliminados();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
@@ -126,6 +139,7 @@ class Proveedores extends CI_Controller {
         $this->load->view('proveedores/eliminados', $data);
         $this->load->view('templates/footer');
     }
+    
 
     public function habilitar($idProveedor) {
         $this->Proveedor_model->habilitar_proveedor($idProveedor);
@@ -134,83 +148,120 @@ class Proveedores extends CI_Controller {
     }
 
     public function check_email($email) {
+        // --- CAMBIO AQUÍ ---
+        // Si el email está vacío o contiene solo espacios en blanco,
+        // significa que el usuario no ingresó un correo y es válido porque es opcional.
+        if (empty(trim($email))) {
+            return TRUE; // El campo está vacío y es válido para la validación 'check_email'.
+        }
+        // --- FIN DEL CAMBIO ---
+    
+        // Si el email no está vacío, entonces sí procedemos a verificar si ya está en uso.
         if ($this->Proveedor_model->email_exists($email)) {
             $this->form_validation->set_message('check_email', 'El correo electrónico ya está en uso.');
-            return FALSE;
+            return FALSE; // El correo electrónico ya existe, por lo tanto, no es válido.
         }
-        return TRUE;
+        return TRUE; // El correo electrónico es único y válido.
     }
 
-    public function imprimir() {
-        // Obtener todos los proveedores
-        $proveedores = $this->Proveedor_model->obtener_proveedores_activos();
-    
-        if (empty($proveedores)) {
-            $this->session->set_flashdata('error', 'No se encontraron proveedores para imprimir.');
-            redirect('proveedores');
-        }
-    
-        // Crear el PDF
-        $pdf = new TCPDF();
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->SetPrintHeader(false);
-        $pdf->AddPage();
-    
-        // Agregar imagen de marca de agua
-        $imagePath = FCPATH . 'assets/img/pisosbol2.PNG';
-        if (file_exists($imagePath)) {
-            list($width, $height) = getimagesize($imagePath);
-            $scaleFactor = 0.3;
-            $x = ($pdf->getPageWidth() - ($width * $scaleFactor)) / 2;
-            $y = ($pdf->getPageHeight() - ($height * $scaleFactor)) / 2;
-            $pdf->SetAlpha(0.3);
-            $pdf->Image($imagePath, $x, $y, $width * $scaleFactor, $height * $scaleFactor, 'PNG');
-            $pdf->SetAlpha(1);
-        } else {
-            $pdf->SetFont('helvetica', 'B', 12);
-            $pdf->Cell(0, 10, 'Error: No se pudo cargar la imagen de membretado.', 0, 1, 'C');
-        }
-    
-        // Contenido del PDF
-        $html = '
-        <h1 style="text-align:center; color:#0c4b93;">Lista de Proveedores</h1>';
-    
-        $html .= '<table border="1" cellpadding="10" style="border-collapse: collapse; width:100%;">
-                      <thead>
-                          <tr style="background-color: #0c4b93; color: white;">
-                              <th style="text-align:left;">N°</th>
-                              <th style="text-align:left;">Nombre</th>
-                              <th style="text-align:left;">Tipo Documento</th>
-                              <th style="text-align:left;">Dirección</th>
-                              <th style="text-align:left;">Correo Electrónico</th>
-                              <th style="text-align:left;">Estado</th>
-                          </tr>
-                      </thead>
-                      <tbody>';
-    
-        foreach ($proveedores as $proveedor) {
-            $html .= '<tr>
-                        <td>' . htmlspecialchars($proveedor['idProveedor']) . '</td>
-                        <td>' . htmlspecialchars($proveedor['nombre']) . '</td>
-                        <td>' . htmlspecialchars($proveedor['tipoDocumento']) . '</td>
-                        <td>' . htmlspecialchars($proveedor['direccion']) . '</td>
-                        <td>' . htmlspecialchars($proveedor['email']) . '</td>
-                        <td>' . ($proveedor['estado'] == '1' ? 'ACTIVO' : 'INACTIVO') . '</td>
-                    </tr>';
-        }
-    
-        $html .= '</tbody>
-                  </table>';
-    
-        // Agregar el contenido al PDF
-        $pdf->writeHTML($html, true, false, true, false, '');
-    
-        // Salida del PDF
-        $pdf->Output('resumen_proveedores.pdf', 'I');
-    }    
+    public function imprimir()
+{
+    // Obtener todos los proveedores
+    $proveedores = $this->Proveedor_model->obtener_proveedores_activos();
+
+    if (empty($proveedores)) {
+        $this->session->set_flashdata('error', 'No se encontraron proveedores para imprimir.');
+        redirect('proveedores');
+    }
+
+    // Crear el PDF
+    $pdf = new TCPDF('L', 'mm', 'A4'); // L: Horizontal, mm: Milímetros, A4: Tamaño
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->setHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN]);
+    $pdf->setFooterFont([PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA]);
+    $pdf->SetMargins(10, 25, 10); // Márgenes ajustados
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+    $pdf->SetPrintHeader(false);
+    $pdf->SetPrintFooter(false); // Sin pie de página
+    $pdf->AddPage();
+
+    // Agregar el logo en la esquina superior izquierda
+    $logoPath = FCPATH . 'assets/img/logoTrans.PNG';
+    if (file_exists($logoPath)) {
+        $pdf->Image($logoPath, 6, -6, 80, 52, 'PNG'); // Ancho=50mm, Alto=30mm
+    }
+
+    // Obtener datos del usuario
+    $nombreUsuario = $this->session->userdata('nombre');
+    $primerApellido = $this->session->userdata('primerApellido');
+    $segundoApellido = $this->session->userdata('segundoApellido');
+    $nombreCompleto = $nombreUsuario . ' ' . $primerApellido . ' ' . $segundoApellido;
+
+    // Obtener fecha y hora de impresión
+    $fechaHora = date('d/m/Y H:i:s');
+
+    // Agregar información del usuario y fecha en la esquina superior derecha
+    $pdf->SetFont('helvetica', '', 8);
+    $pdf->SetXY(200, 5);
+    $pdf->Cell(0, 5, "Fecha y Hora: $fechaHora", 0, 1, 'R');
+    $pdf->SetXY(200, 12);
+    $pdf->Cell(0, 5, "Usuario: $nombreCompleto", 0, 1, 'R');
+
+    // Agregar imagen de marca de agua
+    $watermarkPath = FCPATH . 'assets/img/logoTrans.PNG';
+    if (file_exists($watermarkPath)) {
+        list($width, $height) = getimagesize($watermarkPath);
+        $scaleFactor = 0.1;
+        $x = ($pdf->getPageWidth() - ($width * $scaleFactor)) / 2;
+        $y = ($pdf->getPageHeight() - ($height * $scaleFactor)) / 2;
+        $pdf->SetAlpha(0.3);
+        $pdf->Image($watermarkPath, $x, $y, $width * $scaleFactor, $height * $scaleFactor, 'PNG');
+        $pdf->SetAlpha(1);
+    }
+    // Establecer posición para comenzar la tabla después de la imagen
+    $pdf->Ln(6); // Agregar espacio vertical (20 mm) después de la imagen
+
+    // Contenido del PDF
+    $html = '
+    <div style="text-align:center;">
+        <h1 style="color:#0c4b93;">Lista de Proveedores</h1>
+        <table border="1" cellpadding="5" style="border-collapse: collapse; width: 100%; margin-left: auto; margin-right: auto; text-align:center;">
+            <thead>
+                <tr style="background-color: #0c4b93; color: white;">
+                    <th style="text-align:center; width:  5%;">N°</th>
+                    <th style="text-align:center; width: 18%;">Nombre</th>
+                    <th style="text-align:center; width: 10%;">Tipo Documento</th>
+                    <th style="text-align:center; width: 10%;">Número Documento</th>
+                    <th style="text-align:center; width: 12%;">Teléfono</th>
+                    <th style="text-align:center; width: 18%;">Dirección</th>
+                    <th style="text-align:center; width: 18%;">Correo Electrónico</th>
+                    <th style="text-align:center; width:  8%;">Estado</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+    foreach ($proveedores as $proveedor) {
+        $html .= '<tr>
+                    <td style="text-align:center; width: 5%;">' . htmlspecialchars($proveedor['idProveedor']) . '</td>
+                    <td style="text-align:center; width: 18%;">' . htmlspecialchars($proveedor['nombre']) . '</td>
+                    <td style="text-align:center; width: 10%;">' . htmlspecialchars($proveedor['tipoDocumento']) . '</td>
+                    <td style="text-align:center; width: 10%;">' . htmlspecialchars($proveedor['numDocumento']) . '</td>
+                    <td style="text-align:center; width: 12%;">' . htmlspecialchars($proveedor['telefono']) . '</td>
+                    <td style="text-align:center; width: 18%;">' . htmlspecialchars($proveedor['direccion']) . '</td>
+                    <td style="text-align:center; width: 18%;">' . htmlspecialchars($proveedor['email']) . '</td>
+                    <td style="text-align:center; width: 8%;">' . ($proveedor['estado'] == '1' ? 'ACTIVO' : 'INACTIVO') . '</td>
+                </tr>';
+    }
+
+    $html .= '</tbody>
+              </table>
+    </div>';
+
+    // Agregar el contenido al PDF
+    $pdf->writeHTML($html, true, false, true, false, '');
+
+    // Salida del PDF
+    $pdf->Output('resumen_proveedores.pdf', 'I');
+}
 }
 ?>

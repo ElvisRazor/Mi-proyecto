@@ -13,6 +13,15 @@ class Usuarios extends CI_Controller {
     }
 
     public function index() {
+        // Obtener el rol del usuario desde la sesión
+        $rol = $this->session->userdata('rol');
+
+        // Verificar si el rol es "administrador"
+        if ($rol != 'administrador') {
+            // Si no es administrador, redirigir a otra página o mostrar mensaje de error
+            $this->session->set_flashdata('error', 'No tienes permisos para acceder a la gestión de usuarios.');
+            redirect('dashboard'); // Redirige al dashboard o a una página de acceso denegado
+        }
         $data['usuario'] = $this->Usuario_model->obtener_usuarios_activos();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
@@ -22,9 +31,24 @@ class Usuarios extends CI_Controller {
     }
 
     public function agregar() {
+        // Obtener el rol del usuario desde la sesión
+        $rol = $this->session->userdata('rol');
+
+        // Verificar si el rol es "administrador"
+        if ($rol != 'administrador') {
+            $this->session->set_flashdata('error', 'No tienes permisos para agregar usuarios.');
+            redirect('dashboard'); // Redirige al dashboard o a una página de acceso denegado
+        }
+
         if ($this->input->post()) {
-            $this->form_validation->set_rules('nombre', 'Nombre Completo', 'required|regex_match[/^[a-zA-Z\s]+$/]', [
-                'regex_match' => 'El nombre completo solo puede contener letras y espacios.'
+            $this->form_validation->set_rules('nombre', 'Nombre', 'required|regex_match[/^[a-zA-Z\s]+$/]', [
+                'regex_match' => 'El nombre solo puede contener letras y espacios.'
+            ]);
+            $this->form_validation->set_rules('primerApellido', 'Apellido Paterno', 'required|regex_match[/^[a-zA-Z\s]+$/]', [
+                'regex_match' => 'El Apeliido Paterno solo puede contener letras.'
+            ]);
+            $this->form_validation->set_rules('segundoApellido', 'Apellido Materno', 'regex_match[/^[a-zA-Z\s]+$/]', [
+                'regex_match' => 'El Apellido Materno solo puede contener letras.'
             ]);
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|callback_check_email');
             $this->form_validation->set_rules('rol', 'Rol', 'required');
@@ -41,6 +65,8 @@ class Usuarios extends CI_Controller {
                 $password = $this->generar_contraseña();
                 $data = [
                     'nombre' => $this->input->post('nombre'),
+                    'primerApellido' => $this->input->post('primerApellido'),
+                    'segundoApellido' => $this->input->post('segundoApellido'),
                     'email' => $this->input->post('email'),
                     'rol' => $this->input->post('rol'),
                     'tipoDocumento' => $this->input->post('tipoDocumento'),
@@ -54,6 +80,7 @@ class Usuarios extends CI_Controller {
                 if ($this->Usuario_model->agregar_usuario($data)) {
                     $this->_enviar_correo($this->input->post('email'), $this->input->post('nombre'), $password);
                     $this->session->set_flashdata('mensaje', 'Usuario agregado correctamente. Se ha enviado la contraseña al correo electrónico.');
+                    $this->session->set_flashdata("error", "Contraseña o email incorrecto");
                     redirect('usuarios');
                 } else {
                     $this->session->set_flashdata('error', 'Error al agregar el usuario.');
@@ -74,9 +101,24 @@ class Usuarios extends CI_Controller {
     }
 
     public function editar($idUsuario) {
+        // Obtener el rol del usuario desde la sesión
+        $rol = $this->session->userdata('rol');
+
+        // Verificar si el rol es "administrador"
+        if ($rol != 'administrador') {
+            $this->session->set_flashdata('error', 'No tienes permisos para editar usuarios.');
+            redirect('dashboard'); // Redirige al dashboard o a una página de acceso denegado
+        }
+
         if ($this->input->post()) {
             $this->form_validation->set_rules('nombre', 'Nombre Completo', 'required|regex_match[/^[a-zA-Z\s]+$/]', [
                 'regex_match' => 'El nombre completo solo puede contener letras y espacios.'
+            ]);
+            $this->form_validation->set_rules('primerApellido', 'Apellido Paterno', 'required|regex_match[/^[a-zA-Z\s]+$/]', [
+                'regex_match' => 'El Apeliido Paterno solo puede contener letras.'
+            ]);
+            $this->form_validation->set_rules('segundoApellido', 'Apellido Materno', 'regex_match[/^[a-zA-Z\s]+$/]', [
+                'regex_match' => 'El Apellido Materno solo puede contener letras.'
             ]);
             $this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email');
             $this->form_validation->set_rules('rol', 'Rol', 'required');
@@ -92,6 +134,8 @@ class Usuarios extends CI_Controller {
             if ($this->form_validation->run() === TRUE) {
                 $data = [
                     'nombre' => $this->input->post('nombre'),
+                    'primerApellido' => $this->input->post('primerApellido'),
+                    'segundoApellido' => $this->input->post('segundoApellido'),
                     'email' => $this->input->post('email'),
                     'rol' => $this->input->post('rol'),
                     'tipoDocumento' => $this->input->post('tipoDocumento'),
@@ -128,12 +172,30 @@ class Usuarios extends CI_Controller {
     }
 
     public function eliminar($idUsuario) {
+        // Obtener el rol del usuario desde la sesión
+        $rol = $this->session->userdata('rol');
+
+        // Verificar si el rol es "administrador"
+        if ($rol != 'administrador') {
+            $this->session->set_flashdata('error', 'No tienes permisos para editar usuarios.');
+            redirect('dashboard'); // Redirige al dashboard o a una página de acceso denegado
+        }
+
         $this->Usuario_model->eliminar_usuario($idUsuario);
         $this->session->set_flashdata('mensaje', 'Usuario eliminado correctamente.');
         redirect('usuarios');
     }
 
     public function eliminados() {
+        // Obtener el rol del usuario desde la sesión
+        $rol = $this->session->userdata('rol');
+
+        // Verificar si el rol es "administrador"
+        if ($rol != 'administrador') {
+            $this->session->set_flashdata('error', 'No tienes permisos para editar usuarios.');
+            redirect('dashboard'); // Redirige al dashboard o a una página de acceso denegado
+        }
+        
         $data['usuarios'] = $this->Usuario_model->obtener_usuarios_eliminados();
         $this->load->view('templates/header');
         $this->load->view('templates/navbar');
@@ -143,6 +205,15 @@ class Usuarios extends CI_Controller {
     }
 
     public function habilitar($idUsuario) {
+        // Obtener el rol del usuario desde la sesión
+        $rol = $this->session->userdata('rol');
+
+        // Verificar si el rol es "administrador"
+        if ($rol != 'administrador') {
+            $this->session->set_flashdata('error', 'No tienes permisos para editar usuarios.');
+            redirect('dashboard'); // Redirige al dashboard o a una página de acceso denegado
+        }
+
         $this->Usuario_model->habilitar_usuario($idUsuario);
         $this->session->set_flashdata('mensaje', 'Usuario habilitado correctamente.');
         redirect('usuarios/eliminados');
@@ -181,7 +252,7 @@ class Usuarios extends CI_Controller {
         }
     
         // Crear el PDF
-        $pdf = new TCPDF();
+        $pdf = new TCPDF('L', 'mm', 'A4');
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
@@ -189,7 +260,27 @@ class Usuarios extends CI_Controller {
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         $pdf->SetPrintHeader(false);
         $pdf->AddPage();
-    
+        // Agregar el logo en la esquina superior izquierda
+    $logoPath = FCPATH . 'assets/img/pisosbol(1).PNG';
+    if (file_exists($logoPath)) {
+        $pdf->Image($logoPath, 10, 6, 50, 30, 'PNG'); // Ancho=50mm, Alto=30mm
+    }
+
+    // Obtener datos del usuario
+    $nombreUsuario = $this->session->userdata('nombre');
+    $primerApellido = $this->session->userdata('primerApellido');
+    $segundoApellido = $this->session->userdata('segundoApellido');
+    $nombreCompleto = $nombreUsuario . ' ' . $primerApellido . ' ' . $segundoApellido;
+
+    // Obtener fecha y hora de impresión
+    $fechaHora = date('d/m/Y H:i:s');
+
+    // Agregar información del usuario y fecha en la esquina superior derecha
+    $pdf->SetFont('helvetica', '', 10);
+    $pdf->SetXY(200, 5);
+    $pdf->Cell(0, 5, "Fecha y Hora: $fechaHora", 0, 1, 'R');
+    $pdf->SetXY(200, 12);
+    $pdf->Cell(0, 5, "Usuario: $nombreCompleto", 0, 1, 'R');
         // Agregar imagen de marca de agua
         $imagePath = FCPATH . 'assets/img/pisosbol2.PNG';
         if (file_exists($imagePath)) {
@@ -204,7 +295,7 @@ class Usuarios extends CI_Controller {
             $pdf->SetFont('helvetica', 'B', 12);
             $pdf->Cell(0, 10, 'Error: No se pudo cargar la imagen de membretado.', 0, 1, 'C');
         }
-    
+        $pdf->Ln(20);
         // Contenido del PDF
         $html = '
         <h1 style="text-align:center; color:#0c4b93;">Lista de Usuarios</h1>';
@@ -212,26 +303,30 @@ class Usuarios extends CI_Controller {
         $html .= '<table border="1" cellpadding="10" style="border-collapse: collapse; width:100%;">
                       <thead>
                           <tr style="background-color: #0c4b93; color: white;">
-                              <th style="text-align:left;">N°</th>
-                              <th style="text-align:left;">Nombre</th>
-                              <th style="text-align:left;">Correo Electrónico</th>
-                              <th style="text-align:left;">Tipo Documento</th>
-                              <th style="text-align:left;">Dirección</th>
-                              <th style="text-align:left;">Rol</th>
-                              <th style="text-align:left;">Estado</th>
+                              <th style="text-align:center; width:  5%;">N°</th>
+                              <th style="text-align:center; width:  8%;">Nombre</th>
+                              <th style="text-align:center; width:  9%;">Apellido Paterno</th>
+                              <th style="text-align:center; width:  10%;">Apellido Materno</th>
+                              <th style="text-align:center; width:  18%;">Correo Electrónico</th>
+                              <th style="text-align:center; width:  15%;">Tipo Documento</th>
+                              <th style="text-align:center; width:  15%;">Dirección</th>
+                              <th style="text-align:center; width:  11%;">Rol</th>
+                              <th style="text-align:center; width:  8%;">Estado</th>
                           </tr>
                       </thead>
                       <tbody>';
     
         foreach ($usuarios as $usuario) {
             $html .= '<tr>
-                        <td>' . htmlspecialchars($usuario['idUsuario']) . '</td>
-                        <td>' . htmlspecialchars($usuario['nombre']) . '</td>
-                        <td>' . htmlspecialchars($usuario['email']) . '</td>
-                        <td>' . htmlspecialchars($usuario['tipoDocumento']) . '</td>
-                        <td>' . htmlspecialchars($usuario['direccion']) . '</td>
-                        <td>' . htmlspecialchars($usuario['rol']) . '</td>
-                        <td>' . ($usuario['estado'] == '1' ? 'ACTIVO' : 'INACTIVO') . '</td>
+                        <td style="text-align:center; width:  5%;">' . htmlspecialchars($usuario['idUsuario']) . '</td>
+                        <td style="text-align:center; width:  8%;">' . htmlspecialchars($usuario['nombre']) . '</td>
+                        <td style="text-align:center; width:  9%;">' . htmlspecialchars($usuario['primerApellido']) . '</td>
+                        <td style="text-align:center; width:  10%;">' . htmlspecialchars($usuario['segundoApellido']) . '</td>
+                        <td style="text-align:center; width:  18%;">' . htmlspecialchars($usuario['email']) . '</td>
+                        <td style="text-align:center; width:  15%;">' . htmlspecialchars($usuario['tipoDocumento']) . '</td>
+                        <td style="text-align:center; width:  15%;">' . htmlspecialchars($usuario['direccion']) . '</td>
+                        <td style="text-align:center; width:  11%;">' . htmlspecialchars($usuario['rol']) . '</td>
+                        <td style="text-align:center; width:  8%;">' . ($usuario['estado'] == '1' ? 'ACTIVO' : 'INACTIVO') . '</td>
                     </tr>';
         }
     

@@ -1,5 +1,17 @@
 <div class="content-body">
     <div class="container-fluid">
+        <!-- Mostrar mensaje de éxito si existe -->
+        <?php if ($this->session->flashdata('error')): ?>
+            <script type="text/javascript">
+                // Mostrar el mensaje flotante con Toastr
+                toastr.success('<?php echo $this->session->flashdata('error'); ?>', '¡Éxito!', {
+                    "positionClass": "toast-top-center", // Posición en la parte superior derecha
+                    "closeButton": true,               // Botón de cerrar
+                    "timeOut": 2000,                   // Tiempo en milisegundos (2 segundos)
+                    "progressBar": true,               // Barra de progreso
+                });
+            </script>
+        <?php endif; ?>
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
@@ -46,6 +58,8 @@
                                         <label for="nombre" class="form-label">Nombre</label>
                                         <input type="text" name="nombre" class="form-control" id="nombre" value="<?= $cliente['nombre'] ?>" required>
                                     </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
                                         <label for="direccion" class="form-label">Dirección</label>
                                         <input type="text" name="direccion" class="form-control" id="direccion" value="<?= $cliente['direccion'] ?>" required>
@@ -56,7 +70,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="email" class="form-label">Correo Electrónico</label>
-                                        <input type="email" name="email" class="form-control" id="email" value="<?= $cliente['email'] ?>" required>
+                                        <input type="email" name="email" class="form-control" id="email" value="<?= $cliente['email'] ?>">
                                     </div>
                                 </div>
                             </div>

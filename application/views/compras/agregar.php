@@ -10,12 +10,12 @@
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<?= site_url('compras') ?>">Lista de Compras</a></li>
-                    <li class="breadcrumb-item"><a href="<?= site_url('compras/consulta') ?>">Realizar Consulta</a></li>
                 </ol>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
+            <div id="mensajeServidor" class="alert alert-warning d-none" role="alert"></div>
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Formulario de Compra</h4>
@@ -57,7 +57,7 @@
                                                         <tr data-id="<?= $item['idProveedor'] ?>">
                                                             <td><?= htmlspecialchars($item['nombre']) ?></td>
                                                             <td>
-                                                                <button class="btn btn-primary btn-sm" onclick="seleccionarProveedor(<?= $item['idProveedor'] ?>, '<?= htmlspecialchars($item['nombre']) ?>')">Seleccionar</button>
+                                                                <button class="btn btn-primary btn-sm" onclick="seleccionarProveedor(<?= $item['idProveedor'] ?>, '<?= htmlspecialchars($item['nombre']) ?>', event)">Seleccionar</button>
                                                             </td>
                                                         </tr>
                                                     <?php endforeach; ?>
@@ -89,7 +89,7 @@
                                                     <tr>
                                                         <th>Producto</th>
                                                         <th>Stock</th>
-                                                        <th>Precio</th>
+                                                        <th>Precio Compra</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
@@ -98,9 +98,9 @@
                                                         <tr data-id="<?= $item['idProducto'] ?>">
                                                             <td><?= htmlspecialchars($item['nombre']) ?></td>
                                                             <td><?= htmlspecialchars($item['stock']) ?></td>
-                                                            <td><?= htmlspecialchars($item['precio']) ?></td>
+                                                            <td>Bs.<?= htmlspecialchars($item['precioCompra']) ?></td>
                                                             <td>
-                                                                <button class="btn btn-primary btn-sm" onclick="seleccionarProducto(<?= $item['idProducto'] ?>, '<?= htmlspecialchars($item['nombre']) ?>', <?= $item['stock'] ?>, <?= $item['precio'] ?>)">Seleccionar</button>
+                                                                <button class="btn btn-primary btn-sm" onclick="seleccionarProducto(<?= $item['idProducto'] ?>, '<?= htmlspecialchars($item['nombre']) ?>', <?= $item['stock'] ?>, <?= $item['precioCompra'] ?>), event">Seleccionar</button>
                                                             </td>
                                                         </tr>
                                                     <?php endforeach; ?>
@@ -110,76 +110,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <script>
-                                const productosAgregados = new Set(); // Para almacenar los productos agregados
-
-                                function seleccionarProducto(id, nombre, stock, precio) {
-                                    if (productosAgregados.has(id)) {
-                                        alert("El producto ya ha sido agregado.");
-                                        return;
-                                    }
-                                    let detallesCompra = document.getElementById('detallesCompra').getElementsByTagName('tbody')[0];
-                                    let nuevaFila = `<tr data-id="${id}">
-                                        <td><input type="hidden" name="producto[]" value="${id}">${nombre}</td>
-                                        <td>${stock}</td>
-                                        <td><input type="number" name="cantidad[]" value="0" min="1" class="form-control" onchange="calcularTotalCompra(this)"></td>
-                                        <td><label name="precio[]">${precio}</label></td>
-                                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto(this)">Eliminar</button></td>
-                                    </tr>`;
-                                    detallesCompra.insertAdjacentHTML('beforeend', nuevaFila);
-                                    productosAgregados.add(id); // Agregar el producto al conjunto
-                                    $('#modalProductos').modal('hide'); // Cerrar el modal
-                                    calcularTotalCompra(); // Recalcular el total de la compra
-                                }
-
-                                function seleccionarProveedor(id, nombre) {
-                                    document.getElementById('idProveedor').value = id;
-                                    document.getElementById('proveedorLabel').innerText = nombre; // Mostrar el nombre del proveedor en el label
-                                    $('#modalProveedores').modal('hide'); // Cerrar el modal
-                                }
-
-                                function calcularTotalCompra() {
-                                    let total = 0;
-                                    const cantidades = document.querySelectorAll('input[name="cantidad[]"]');
-                                    const precios = document.querySelectorAll('label[name="precio[]"]');
-
-                                    cantidades.forEach((cantidad, index) => {
-                                        const cantidadValue = parseFloat(cantidad.value);
-                                        const precioValue = parseFloat(precios[index].innerText);
-
-                                        total += cantidadValue * precioValue;
-                                    });
-
-                                    document.getElementById('totalCompra').innerText = total.toFixed(2);
-                                    document.getElementById('totalCompraInput').value = total.toFixed(2); // Valor total
-                                }
-
-                                function eliminarProducto(button) {
-                                    const row = button.closest('tr');
-                                    const idProducto = row.dataset.id;
-                                    productosAgregados.delete(parseInt(idProducto)); // Eliminar el producto del conjunto
-                                    row.remove();
-                                    calcularTotalCompra(); // Recalcular el total de la compra
-                                }
-
-                                function cancelarCompraFormulario() {
-                                    // Limpiar el formulario de compra
-                                    document.getElementById('idProveedor').value = '';
-                                    document.getElementById('proveedorLabel').innerText = 'Selecciona un proveedor'; // Restablecer el proveedor
-                                    document.getElementById('detallesCompra').getElementsByTagName('tbody')[0].innerHTML = ''; // Limpiar productos
-                                    calcularTotalCompra(); // Recalcular total
-                                }
-
-                                function cancelarVenta() {
-                                    // Limpiar el formulario de venta
-                                    document.getElementById('idCliente').value = '';
-                                    document.getElementById('clienteSeleccionado').innerText = 'Ninguno';
-                                    document.getElementById('detallesVenta').getElementsByTagName('tbody')[0].innerHTML = ''; // Limpiar productos
-                                    calcularTotalVenta(); // Recalcular total
-                                }
-                            </script>
-
                             <br>
                             <table id="detallesCompra" class="table table-bordered">
                                 <thead>
@@ -187,7 +117,7 @@
                                         <th>Producto</th>
                                         <th>Stock</th>
                                         <th>Cantidad</th>
-                                        <th>Precio</th>
+                                        <th>Precio Compra</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -198,7 +128,7 @@
                             <div class="form-group">
                                 <label for="totalCompra">Total Compra</label>
                                 <input type="hidden" class="form-control" id="totalCompraInput" name="totalCompra" value="0.00" readonly>
-                                <label id="totalCompra" class="form-control" readonly>0.00</label>
+                                <label id="totalCompra" class="form-control" readonly>Bs. 0.00</label>
                                 <?= form_error('totalCompra') ?>
                             </div>
                             <button type="submit" class="btn btn-success">Guardar Compra</button>
@@ -210,3 +140,89 @@
         </div>
     </div>
 </div>
+<script>
+    const productosAgregados = new Set(); // Para almacenar los productos agregados
+    function seleccionarProducto(id, nombre, stock, precioCompra, event) {
+    //event.preventDefault();  // Prevenir la recarga de la página si algo está sucediendo
+    if (productosAgregados.has(id)) {
+        //alert("El producto ya ha sido agregado.");
+        return;
+    }
+    let detallesCompra = document.getElementById('detallesCompra').getElementsByTagName('tbody')[0];
+    let nuevaFila = `<tr data-id="${id}">
+        <td><input type="hidden" name="producto[]" value="${id}">${nombre}</td>
+        <td>${stock}</td>
+        <td><input type="number" name="cantidad[]" value="0" min="1" class="form-control" onchange="calcularTotalCompra(this)"></td>
+        <td>Bs.<label name="precioCompra[]">${precioCompra}</label></td>
+        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto(this)">Eliminar</button></td>
+    </tr>`;
+    detallesCompra.insertAdjacentHTML('beforeend', nuevaFila);
+    productosAgregados.add(id); // Agregar el producto al conjunto
+    $('#modalProductos').modal('hide'); // Cerrar el modal
+    calcularTotalCompra(); // Recalcular el total de la compra
+    }
+
+    function seleccionarProveedor(id, nombre, event) {
+    event.preventDefault();  // Prevenir la recarga de la página si algo está sucediendo
+    document.getElementById('idProveedor').value = id;
+    document.getElementById('proveedorLabel').innerText = nombre; // Mostrar el nombre del proveedor en el label
+    $('#modalProveedores').modal('hide'); // Cerrar el modal
+    }
+
+    function calcularTotalCompra() {
+        let total = 0;
+        const cantidades = document.querySelectorAll('input[name="cantidad[]"]');
+        const precios = document.querySelectorAll('label[name="precioCompra[]"]');
+        cantidades.forEach((cantidad, index) => {
+            const cantidadValue = parseFloat(cantidad.value);
+            const precioValue = parseFloat(precios[index].innerText);
+            total += cantidadValue * precioValue;
+        });
+        document.getElementById('totalCompra').innerText = total.toFixed(2);
+        document.getElementById('totalCompraInput').value = total.toFixed(2); // Valor total
+    }
+    function eliminarProducto(button) {
+        const row = button.closest('tr');
+        const idProducto = row.dataset.id;
+        productosAgregados.delete(parseInt(idProducto)); // Eliminar el producto del conjunto
+        row.remove();
+        calcularTotalCompra(); // Recalcular el total de la compra
+    }
+    function cancelarCompraFormulario() {
+        // Limpiar el formulario de compra
+        document.getElementById('idProveedor').value = '';
+        document.getElementById('proveedorLabel').innerText = 'Selecciona un proveedor'; // Restablecer el proveedor
+        document.getElementById('detallesCompra').getElementsByTagName('tbody')[0].innerHTML = ''; // Limpiar productos
+        calcularTotalCompra(); // Recalcular total
+    }
+    function filtrarProveedores() {
+    const input = document.getElementById('buscarProveedorModal');
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById('tablaProveedores');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) { // Empezar desde 1 para omitir el encabezado
+        const proveedor = rows[i].getElementsByTagName('td')[0];
+        if (proveedor) {
+            const txtValue = proveedor.textContent || proveedor.innerText;
+            rows[i].style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
+        }
+    }
+}
+
+function filtrarProductos() {
+    const input = document.getElementById('buscarProducto');
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById('tablaProductos');
+    const rows = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < rows.length; i++) { // Empezar desde 1 para omitir el encabezado
+        const producto = rows[i].getElementsByTagName('td')[0];
+        if (producto) {
+            const txtValue = producto.textContent || producto.innerText;
+            rows[i].style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
+        }
+    }
+}
+
+</script>

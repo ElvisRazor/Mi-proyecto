@@ -28,14 +28,17 @@ class Login extends CI_Controller {
             $data = array(
                 'id' => $res->id,
                 'nombre' => $res->nombre,
+                'primerApellido' => $res->primerApellido, // Añadir primer apellido
+                'segundoApellido' => $res->segundoApellido, // Añadir segundo apellido
                 'email' => $res->email,
                 'telefono' => $res->telefono,
                 'rol' => $res->rol,
                 'imagen' => $res->imagen,
                 'login' => TRUE
             );
-
             $this->session->set_userdata($data);
+             // Mensaje de bienvenida
+            $this->session->set_flashdata("success", "Bienvenido, " . $res->nombre . "!");
             redirect(base_url()."dashboard");
         }
     }

@@ -1,0 +1,130 @@
+CREATE DATABASE dbpisosbol;
+USE dbpisosbol;
+
+-- Tabla usuarios
+CREATE TABLE IF NOT EXISTS usuario (
+    idUsuario SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    rol VARCHAR(20) NOT NULL, -- Rol definido como VARCHAR
+    nombre VARCHAR(50) NOT NULL,
+    primerApellido VARCHAR(50) NOT NULL, -- Nuevo campo obligatorio
+    segundoApellido VARCHAR(50) DEFAULT NULL, -- Nuevo campo opcional
+    tipoDocumento VARCHAR(20) NOT NULL,
+    numDocumento VARCHAR(20) NOT NULL UNIQUE,
+    direccion VARCHAR(70),
+    telefono VARCHAR(20),
+    email VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(64) NOT NULL,
+    estado TINYINT DEFAULT 1,
+    fechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimaActualizacion TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabla categorias
+CREATE TABLE IF NOT EXISTS categoria (
+    idCategoria SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    estado TINYINT DEFAULT 1,
+    fechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimaActualizacion TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+    idUsuario SMALLINT
+);
+
+-- Tabla productos
+CREATE TABLE IF NOT EXISTS producto (
+    idProducto SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    idCategoria SMALLINT,
+    codigo VARCHAR(50) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    precio VARCHAR(10) NOT NULL,
+    stock INT CHECK (stock >= 0),
+    descripcion VARCHAR(255),
+    imagen VARCHAR(100),
+    estado TINYINT DEFAULT 1,
+    fechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimaActualizacion TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+    idUsuario SMALLINT,
+    FOREIGN KEY (idCategoria) REFERENCES categoria(idCategoria) ON DELETE SET NULL
+);
+-- Tabla clientes
+CREATE TABLE IF NOT EXISTS cliente (
+    idCliente SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    tipoDocumento VARCHAR(20) NOT NULL,
+    numDocumento VARCHAR(20) NOT NULL UNIQUE,
+    direccion VARCHAR(70),
+    telefono VARCHAR(20),
+    email VARCHAR(50) UNIQUE,
+    estado TINYINT DEFAULT 1,
+    fechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimaActualizacion TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+    idUsuario SMALLINT,
+    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE SET NULL
+);
+-- Tabla proveedores
+CREATE TABLE IF NOT EXISTS proveedor (
+    idProveedor SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    tipoDocumento VARCHAR(20) NOT NULL,
+    numDocumento VARCHAR(20) NOT NULL UNIQUE,
+    direccion VARCHAR(70),
+    telefono VARCHAR(20),
+    email VARCHAR(50) UNIQUE,
+    estado TINYINT DEFAULT 1,
+    fechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimaActualizacion TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+    idUsuario SMALLINT,
+    FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario) ON DELETE SET NULL
+);
+-- Tabla compras
+CREATE TABLE IF NOT EXISTS compra (
+    idCompra SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    idProveedor SMALLINT,
+    numComprobante VARCHAR(20),
+    totalCompra DECIMAL(11,2),
+    estado TINYINT DEFAULT 1,
+    fechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimaActualizacion TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+    idUsuario SMALLINT,
+    FOREIGN KEY (idProveedor) REFERENCES proveedor(idProveedor) ON DELETE SET NULL
+);
+-- Tabla detalle_compras
+CREATE TABLE IF NOT EXISTS detalleCompra (
+    idDetalleCompra SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    idCompra SMALLINT,
+    idProducto SMALLINT,
+    cantidad INT NOT NULL,
+    precio DECIMAL(11,2) NOT NULL,
+    totalCompra DECIMAL(11,2) NOT NULL,
+    FOREIGN KEY (idCompra) REFERENCES compra(idCompra) ON DELETE CASCADE,
+    FOREIGN KEY (idProducto) REFERENCES producto(idProducto) ON DELETE SET NULL
+);
+-- Tabla ventas
+CREATE TABLE IF NOT EXISTS venta (
+    idVenta SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    idCliente SMALLINT,
+    idProducto SMALLINT,
+    numComprobante VARCHAR(10),
+    subTotalVenta DECIMAL(11,2) NOT NULL,
+    descuento DECIMAL(11,2) NOT NULL,
+    totalVenta DECIMAL(11,2) NOT NULL,
+    estado TINYINT DEFAULT 1,
+    fechaRegistro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimaActualizacion TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+    idUsuario SMALLINT,
+    FOREIGN KEY (idCliente) REFERENCES cliente(idCliente) ON DELETE SET NULL
+);
+
+-- Tabla detalle_ventas
+CREATE TABLE IF NOT EXISTS detalleVenta (
+    idDetalleVenta SMALLINT PRIMARY KEY AUTO_INCREMENT,
+    idVenta SMALLINT,
+    idProducto SMALLINT,
+    cantidad INT NOT NULL,
+    precio DECIMAL(11,2) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    descuento DECIMAL(11,2),
+    totalVenta DECIMAL(11,2) NOT NULL,
+    FOREIGN KEY (idVenta) REFERENCES venta(idVenta) ON DELETE CASCADE,
+    FOREIGN KEY (idProducto) REFERENCES producto(idProducto) ON DELETE SET NULL
+);

@@ -24,6 +24,14 @@ $route['usuarios/eliminar/(:num)'] = 'usuarios/eliminar/$1';
 $route['usuarios/eliminados'] = 'usuarios/eliminados';
 $route['usuarios/habilitar/(:num)'] = 'usuarios/habilitar/$1';
 
+// Rutas para Clientes
+$route['clientes'] = 'clientes/index';
+$route['clientes/agregar'] = 'clientes/agregar';
+$route['clientes/editar/(:num)'] = 'clientes/editar/$1';
+$route['clientes/eliminar/(:num)'] = 'clientes/eliminar/$1';
+$route['clientes/eliminados'] = 'clientes/eliminados';
+$route['clientes/habilitar/(:num)'] = 'clientes/habilitar/$1';
+
 // Rutas para el controlador de categorías
 $route['categorias'] = 'categorias/index'; // Muestra la lista de categorías activas
 $route['categorias/agregar'] = 'categorias/agregar'; // Agrega una nueva categoría
@@ -47,7 +55,6 @@ $route['compras/editar/(:num)'] = 'compras/editar/$1'; // Ruta para editar una c
 $route['compras/eliminar/(:num)'] = 'compras/eliminar/$1'; // Ruta para eliminar una compra específica
 $route['compras/eliminados'] = 'compras/eliminados'; // Ruta para listar las compras eliminadas
 $route['compras/habilitar/(:num)'] = 'compras/habilitar/$1'; // Ruta para habilitar una compra eliminada
-$route['compras/consulta'] = 'compras/consulta'; // Consulta de compras por fechas
 
 // Ruta para el controlador de ventas
 $route['ventas'] = 'ventas/index'; // Ruta para listar todas las ventas
@@ -63,6 +70,13 @@ $route['productos'] = 'productos/index'; // Página principal de productos
 $route['productos/agregar'] = 'productos/agregar'; // Página para agregar un nuevo producto
 $route['productos/editar/(:num)'] = 'productos/editar/$1'; // Página para editar un producto
 $route['productos/eliminar/(:num)'] = 'productos/eliminar/$1'; // Página para eliminar un producto
+$route['productos/eliminados'] = 'productos/eliminados'; // Muestra los productos eliminados
+$route['productos/habilitar/(:num)'] = 'productos/habilitar/$1'; // Habilita un productos eliminado
+
+// Rutas para Reportes
+$route['reporte/ventasPorFechas'] = 'reporte/ventasPorFechas';
+$route['reporte/productosMasVendidos'] = 'reporte/productosMasVendidos';
+$route['reporte/clientesFieles'] = 'reporte/clientesFieles';
 
 // Configuración para manejar errores 404
 $route['404_override'] = 'errors/page_missing'; // Ruta para el controlador de errores 404 (opcional)
